@@ -220,10 +220,10 @@ const options = yargs
     },
   }).argv as unknown as Options;
 
-if (options.filename !== undefined) {
+if (options.filename) {
   // Process a single image
   processImage(options);
-} else if (options.folderPath !== undefined) {
+} else if (options.folderPath) {
   // Process all images in a folder, splitting the task into threads
   let numCores = 2;
   try {

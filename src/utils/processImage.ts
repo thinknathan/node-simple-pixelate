@@ -42,34 +42,42 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
     height,
   } = options;
 
-  if (filename && skipExtCheck) {
+  if (filename) {
     Jimp.read(filename, (err, image) => {
-      if (err) {
+      if (err && skipExtCheck) {
         console.error(err);
       } else {
-        continueProcessing(
-          image,
-          scale,
-          pixelSize,
-          ditherAlgo,
-          alphaThreshold,
-          colorLimit,
-          palette,
-          customPalette,
-          randomColor,
-          lowPass,
-          normalize,
-          grayScale,
-          contrast,
-          width,
-          height,
-          filename,
-        );
+        // Continue if image is successfully read
+        if (image) {
+          continueProcessing(
+            image,
+            scale,
+            pixelSize,
+            ditherAlgo,
+            alphaThreshold,
+            colorLimit,
+            palette,
+            customPalette,
+            randomColor,
+            lowPass,
+            normalize,
+            grayScale,
+            contrast,
+            width,
+            height,
+            filename,
+          );
+          return;
+        }
       }
     });
+  }
+
+  if (skipExtCheck) {
     return;
   }
 
+  // Check for supported image formats if skipExtCheck is false
   const supportedFormats = [".png", ".gif", ".jpg", ".jpeg"];
   let foundImage = false;
 

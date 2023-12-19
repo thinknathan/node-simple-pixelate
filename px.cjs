@@ -216,10 +216,10 @@ const options = yargs
       return Math.round(value);
     },
   }).argv;
-if (options.filename !== undefined) {
+if (options.filename) {
   // Process a single image
   (0, processImage_1.processImage)(options);
-} else if (options.folderPath !== undefined) {
+} else if (options.folderPath) {
   // Process all images in a folder, splitting the task into threads
   let numCores = 2;
   try {
