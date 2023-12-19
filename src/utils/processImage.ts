@@ -33,6 +33,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
     colorLimit,
     palette,
     customPalette,
+    randomColor,
     lowPass,
     normalize,
     grayScale,
@@ -53,6 +54,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
           colorLimit,
           palette,
           customPalette,
+          randomColor,
           lowPass,
           normalize,
           grayScale,
@@ -86,6 +88,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
             colorLimit,
             palette,
             customPalette,
+            randomColor,
             lowPass,
             normalize,
             grayScale,
@@ -109,6 +112,7 @@ function continueProcessing(
   colorLimit: number,
   palette: string | undefined,
   customPalette: Color[] | undefined,
+  randomColor: boolean,
   lowPass: boolean,
   normalize: boolean,
   grayScale: boolean,
@@ -120,7 +124,7 @@ function continueProcessing(
   // RESIZE
   if (width || height) {
     image.resize(width ? width : Jimp.AUTO, height ? height : Jimp.AUTO);
-  } else {
+  } else if (scale !== 1) {
     image.scale(scale);
   }
 
@@ -174,7 +178,11 @@ function continueProcessing(
     if (colorLimit === 2) {
       applyBWThreshold(image);
     } else {
-      definedPalettes[customPaletteName] = applyMedianCut(image, colorLimit);
+      definedPalettes[customPaletteName] = applyMedianCut(
+        image,
+        colorLimit,
+        randomColor,
+      );
       applyPalette(image, customPaletteName, definedPalettes);
     }
   }
@@ -189,7 +197,24 @@ function continueProcessing(
     inputFilename,
     path.extname(inputFilename),
   );
-  const outputFilename = `${outputFolder}/${baseFilename}_f${ditherAlgo}_c${colorLimit}_p${pixelSize}.png`;
+  let outputFilename = `${outputFolder}/${baseFilename}-d_${ditherAlgo}`;
+  if (customPalette) {
+    outputFilename = `${outputFilename}-o_custom`;
+  } else if (palette) {
+    outputFilename = `${outputFilename}-p_${palette}`;
+  } else {
+    outputFilename = `${outputFilename}-c_${colorLimit}`;
+  }
+  if (grayScale) {
+    outputFilename = `${outputFilename}-g`;
+  }
+  if (lowPass) {
+    outputFilename = `${outputFilename}-l`;
+  }
+  if (pixelSize > 0) {
+    outputFilename = `${outputFilename}-z_${pixelSize}`;
+  }
+  outputFilename = `${outputFilename}.png`;
 
   image.write(outputFilename);
   console.log(`Image saved: ${outputFilename}`);

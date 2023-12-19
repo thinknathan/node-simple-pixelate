@@ -23,11 +23,11 @@ const definedPalettes = definedPalettes_1.definedPalettesImport;
  * @param skipExtCheck - (Optional) Skips extension check if set to true.
  */
 function processImage(options, skipExtCheck) {
-    const { filename, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, lowPass, normalize, grayScale, contrast, width, height, } = options;
+    const { filename, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, } = options;
     if (filename && skipExtCheck) {
         Jimp.read(filename, (err, image) => {
             if (!err) {
-                continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, lowPass, normalize, grayScale, contrast, width, height, filename);
+                continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, filename);
             }
         });
         return;
@@ -41,19 +41,19 @@ function processImage(options, skipExtCheck) {
             Jimp.read(fullFilename, (err, image) => {
                 if (!foundImage && !err) {
                     foundImage = true;
-                    continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, lowPass, normalize, grayScale, contrast, width, height, fullFilename);
+                    continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, fullFilename);
                 }
             });
         }
     });
 }
 exports.processImage = processImage;
-function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, lowPass, normalize, grayScale, contrast, width, height, inputFilename) {
+function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, inputFilename) {
     // RESIZE
     if (width || height) {
         image.resize(width ? width : Jimp.AUTO, height ? height : Jimp.AUTO);
     }
-    else {
+    else if (scale !== 1) {
         image.scale(scale);
     }
     // NORMALIZE
@@ -104,7 +104,7 @@ function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold,
             (0, applyBWThreshold_1.applyBWThreshold)(image);
         }
         else {
-            definedPalettes[customPaletteName] = (0, applyMedianCut_1.applyMedianCut)(image, colorLimit);
+            definedPalettes[customPaletteName] = (0, applyMedianCut_1.applyMedianCut)(image, colorLimit, randomColor);
             (0, applyPalette_1.applyPalette)(image, customPaletteName, definedPalettes);
         }
     }
@@ -114,7 +114,26 @@ function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold,
     }
     // Incorporate the input filename into the output filename
     const baseFilename = path.basename(inputFilename, path.extname(inputFilename));
-    const outputFilename = `${outputFolder}/${baseFilename}_f${ditherAlgo}_c${colorLimit}_p${pixelSize}.png`;
+    let outputFilename = `${outputFolder}/${baseFilename}-d_${ditherAlgo}`;
+    if (customPalette) {
+        outputFilename = `${outputFilename}-o_custom`;
+    }
+    else if (palette) {
+        outputFilename = `${outputFilename}-p_${palette}`;
+    }
+    else {
+        outputFilename = `${outputFilename}-c_${colorLimit}`;
+    }
+    if (grayScale) {
+        outputFilename = `${outputFilename}-g`;
+    }
+    if (lowPass) {
+        outputFilename = `${outputFilename}-l`;
+    }
+    if (pixelSize > 0) {
+        outputFilename = `${outputFilename}-z_${pixelSize}`;
+    }
+    outputFilename = `${outputFilename}.png`;
     image.write(outputFilename);
     console.log(`Image saved: ${outputFilename}`);
 }
