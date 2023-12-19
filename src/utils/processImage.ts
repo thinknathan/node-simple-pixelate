@@ -44,7 +44,9 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
 
   if (filename && skipExtCheck) {
     Jimp.read(filename, (err, image) => {
-      if (!err) {
+      if (err) {
+        console.error(err);
+      } else {
         continueProcessing(
           image,
           scale,

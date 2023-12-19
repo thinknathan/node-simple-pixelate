@@ -26,7 +26,10 @@ function processImage(options, skipExtCheck) {
     const { filename, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, } = options;
     if (filename && skipExtCheck) {
         Jimp.read(filename, (err, image) => {
-            if (!err) {
+            if (err) {
+                console.error(err);
+            }
+            else {
                 continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, filename);
             }
         });
