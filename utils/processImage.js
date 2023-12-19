@@ -114,7 +114,26 @@ function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold,
     }
     // Incorporate the input filename into the output filename
     const baseFilename = path.basename(inputFilename, path.extname(inputFilename));
-    const outputFilename = `${outputFolder}/${baseFilename}_${ditherAlgo}_c${colorLimit}_p${pixelSize}.png`;
+    let outputFilename = `${outputFolder}/${baseFilename}-d_${ditherAlgo}`;
+    if (customPalette) {
+        outputFilename = `${outputFilename}-o_custom`;
+    }
+    else if (palette) {
+        outputFilename = `${outputFilename}-p_${palette}`;
+    }
+    else {
+        outputFilename = `${outputFilename}-c_${colorLimit}`;
+    }
+    if (grayScale) {
+        outputFilename = `${outputFilename}-g`;
+    }
+    if (lowPass) {
+        outputFilename = `${outputFilename}-l`;
+    }
+    if (pixelSize > 0) {
+        outputFilename = `${outputFilename}-z_${pixelSize}`;
+    }
+    outputFilename = `${outputFilename}.png`;
     image.write(outputFilename);
     console.log(`Image saved: ${outputFilename}`);
 }
