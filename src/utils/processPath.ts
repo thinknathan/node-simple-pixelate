@@ -2,6 +2,9 @@ import * as fs from "fs";
 import * as path from "path";
 import { WorkerPool } from "./workerPool";
 
+/**
+ * Processes all files in the specified directory with the given image processing options.
+ */
 export function processPath(
   directoryPath: string,
   options: Options,

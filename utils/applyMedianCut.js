@@ -2,6 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.applyMedianCut = void 0;
 const Jimp = require("jimp");
+/**
+ * Applies the Median Cut algorithm to reduce the color palette of the given Jimp image.
+ * Returns an array of representative colors based on the specified color limit.
+ *
+ * @returns An array of Color objects representing the reduced color palette.
+ */
 function applyMedianCut(image, colorLimit) {
     const pixels = [];
     // Collect all pixels from the image

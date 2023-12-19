@@ -1,5 +1,9 @@
 import * as Jimp from "jimp";
 
+/**
+ * Applies a low-pass filter to the given Jimp image.
+ * Smoothens the image by averaging the colors of neighboring pixels.
+ */
 export function applyLowPassFilter(image: Jimp): void {
   const { width, height } = image.bitmap;
 

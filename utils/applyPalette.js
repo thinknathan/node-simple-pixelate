@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.applyPalette = void 0;
 const Jimp = require("jimp");
+/**
+ * Applies a custom color palette to the given Jimp image.
+ */
 function applyPalette(image, palette, definedPalettes) {
     if (!definedPalettes[palette]) {
         console.error(`${palette} not found in predefined palettes.`);

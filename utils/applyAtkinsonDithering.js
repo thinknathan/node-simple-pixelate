@@ -2,6 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.applyAtkinsonDithering = void 0;
 const Jimp = require("jimp");
+/**
+ * Applies Atkinson dithering to the given Jimp image.
+ * Converts each pixel to black or white based on intensity,
+ * propagates quantization errors to neighboring pixels.
+ */
 function applyAtkinsonDithering(image) {
     const { width, height } = image.bitmap;
     for (let y = 0; y < height - 1; y++) {

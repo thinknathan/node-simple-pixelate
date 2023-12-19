@@ -16,6 +16,12 @@ const applyMedianCut_1 = require("./applyMedianCut");
 const outputFolder = "output";
 const customPaletteName = "CUSTOM";
 const definedPalettes = definedPalettes_1.definedPalettesImport;
+/**
+ * Processes the given image with various image manipulation options.
+ *
+ * @param options - Image processing options.
+ * @param skipExtCheck - (Optional) Skips extension check if set to true.
+ */
 function processImage(options, skipExtCheck) {
     const { filename, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, lowPass, normalize, grayScale, contrast, width, height, } = options;
     if (filename && skipExtCheck) {

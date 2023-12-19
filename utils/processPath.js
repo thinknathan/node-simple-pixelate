@@ -4,6 +4,9 @@ exports.processPath = void 0;
 const fs = require("fs");
 const path = require("path");
 const workerPool_1 = require("./workerPool");
+/**
+ * Processes all files in the specified directory with the given image processing options.
+ */
 function processPath(directoryPath, options, maxWorkers) {
     const workerPool = new workerPool_1.WorkerPool(maxWorkers);
     // Read the contents of the directory

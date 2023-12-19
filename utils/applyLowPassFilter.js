@@ -2,6 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.applyLowPassFilter = void 0;
 const Jimp = require("jimp");
+/**
+ * Applies a low-pass filter to the given Jimp image.
+ * Smoothens the image by averaging the colors of neighboring pixels.
+ */
 function applyLowPassFilter(image) {
     const { width, height } = image.bitmap;
     for (let y = 1; y < height - 1; y++) {

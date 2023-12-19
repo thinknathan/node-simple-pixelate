@@ -1,5 +1,10 @@
 import * as Jimp from "jimp";
 
+/**
+ * Applies Atkinson dithering to the given Jimp image.
+ * Converts each pixel to black or white based on intensity,
+ * propagates quantization errors to neighboring pixels.
+ */
 export function applyAtkinsonDithering(image: Jimp): void {
   const { width, height } = image.bitmap;
 

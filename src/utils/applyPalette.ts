@@ -3,6 +3,9 @@ import * as Jimp from "jimp";
 import { definedPalettesImport } from "./definedPalettes";
 type TDefinedPalettes = typeof definedPalettesImport & Record<string, Color[]>;
 
+/**
+ * Applies a custom color palette to the given Jimp image.
+ */
 export function applyPalette(
   image: Jimp,
   palette: string,

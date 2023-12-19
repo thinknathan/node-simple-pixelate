@@ -1,5 +1,10 @@
 import * as Jimp from "jimp";
 
+/**
+ * Applies a black-and-white threshold to the given Jimp image.
+ * Converts each pixel to either black or white based on luminance values.
+ * Adjust the threshold to control the balance between black and white.
+ */
 export function applyBWThreshold(image: Jimp): void {
   const threshold = 128; // Adjust this threshold as needed
   image.scan(

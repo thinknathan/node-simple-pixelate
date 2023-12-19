@@ -17,6 +17,12 @@ const customPaletteName = "CUSTOM";
 const definedPalettes = definedPalettesImport as typeof definedPalettesImport &
   Record<string, Color[]>;
 
+/**
+ * Processes the given image with various image manipulation options.
+ *
+ * @param options - Image processing options.
+ * @param skipExtCheck - (Optional) Skips extension check if set to true.
+ */
 export function processImage(options: Options, skipExtCheck?: boolean): void {
   const {
     filename,

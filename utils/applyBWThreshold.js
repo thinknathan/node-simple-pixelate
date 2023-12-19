@@ -1,6 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.applyBWThreshold = void 0;
+/**
+ * Applies a black-and-white threshold to the given Jimp image.
+ * Converts each pixel to either black or white based on luminance values.
+ * Adjust the threshold to control the balance between black and white.
+ */
 function applyBWThreshold(image) {
     const threshold = 128; // Adjust this threshold as needed
     image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {

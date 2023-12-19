@@ -1,5 +1,9 @@
 import * as Jimp from "jimp";
 
+/**
+ * Applies Bayer dithering to the given Jimp image using a predefined matrix.
+ * Converts each pixel to black or white based on intensity values from the matrix.
+ */
 export function applyBayerDithering(image: Jimp) {
   const bayerMatrix = [
     [0, 8, 2, 10],

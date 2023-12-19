@@ -4,7 +4,7 @@ import * as os from "os";
 import { processImage } from "./utils/processImage";
 import { processPath } from "./utils/processPath";
 
-// Command line argument parsing
+// Parse command line arguments
 const options = yargs
   .option("f", {
     alias: "filename",
@@ -215,8 +215,10 @@ const options = yargs
   }).argv as unknown as Options;
 
 if (options.filename !== undefined) {
+  // Process a single image
   processImage(options);
 } else if (options.folderPath !== undefined) {
+  // Process all images in a folder, splitting the task into threads
   let numCores = 2;
   try {
     numCores = os.cpus().length;

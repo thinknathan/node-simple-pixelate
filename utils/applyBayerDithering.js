@@ -2,6 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.applyBayerDithering = void 0;
 const Jimp = require("jimp");
+/**
+ * Applies Bayer dithering to the given Jimp image using a predefined matrix.
+ * Converts each pixel to black or white based on intensity values from the matrix.
+ */
 function applyBayerDithering(image) {
     const bayerMatrix = [
         [0, 8, 2, 10],
