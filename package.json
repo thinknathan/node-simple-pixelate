@@ -1,6 +1,6 @@
 {
   "name": "node-simple-pixelate",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Pixelizes images to create pixel art.",
   "repository": {
     "type": "git",
@@ -11,11 +11,12 @@
   "type": "commonjs",
   "main": "px.cjs",
   "files": [
-    "px.cjs"
+    "px.cjs",
+    "utils"
   ],
   "scripts": {
     "build": "tsc && npm run renameCjs && npm run prettier",
-    "renameCjs": "node -e \"require('fs').renameSync('px.js', 'px.cjs')\" && node -e \"require('fs').renameSync('px-palettes.js', 'px-palettes.cjs')\"",
+    "renameCjs": "node -e \"require('fs').renameSync('px.js', 'px.cjs')\"",
     "prettier": "prettier \"./**/*.{ts,d.ts,cjs,md,json}\" --write"
   },
   "devDependencies": {
@@ -25,7 +26,7 @@
     "typescript": "~5.2.2"
   },
   "dependencies": {
-    "jimp": "^0.22.10",
+    "jimp": "~0.22.10",
     "yargs": "^17.7.2"
   }
 }
