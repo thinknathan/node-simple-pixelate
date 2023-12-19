@@ -1,13 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const yargs = require("yargs");
+const os = require("os");
 const processImage_1 = require("./utils/processImage");
+const processPath_1 = require("./utils/processPath");
 // Command line argument parsing
 const options = yargs
   .option("f", {
     alias: "filename",
     describe: "Input image filename",
-    demandOption: true,
+    type: "string",
+  })
+  .option("i", {
+    alias: "folderPath",
+    describe: "Input folder",
     type: "string",
   })
   .option("s", {
@@ -204,5 +210,15 @@ const options = yargs
       return Math.round(value);
     },
   }).argv;
-// Invoke image processing with the parsed options
-(0, processImage_1.processImage)(options);
+if (options.filename !== undefined) {
+  (0, processImage_1.processImage)(options);
+} else if (options.folderPath !== undefined) {
+  let numCores = 2;
+  try {
+    numCores = os.cpus().length;
+  } catch (err) {
+    console.error(err);
+  }
+  numCores = Math.max(numCores - 1, 1);
+  (0, processPath_1.processPath)(options.folderPath, options, numCores);
+}

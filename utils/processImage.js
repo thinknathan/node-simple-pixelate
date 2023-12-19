@@ -4,7 +4,8 @@ exports.processImage = void 0;
 const Jimp = require("jimp");
 const fs = require("fs");
 const path = require("path");
-const definedPalettesImport = require("./definedPalettes");
+const worker_threads_1 = require("worker_threads");
+const definedPalettes_1 = require("./definedPalettes");
 const applyAlphaThreshold_1 = require("./applyAlphaThreshold");
 const applyAtkinsonDithering_1 = require("./applyAtkinsonDithering");
 const applyBayerDithering_1 = require("./applyBayerDithering");
@@ -14,9 +15,17 @@ const applyPalette_1 = require("./applyPalette");
 const applyMedianCut_1 = require("./applyMedianCut");
 const outputFolder = "output";
 const customPaletteName = "CUSTOM";
-const definedPalettes = definedPalettesImport;
-function processImage(options) {
+const definedPalettes = definedPalettes_1.definedPalettesImport;
+function processImage(options, skipExtCheck) {
     const { filename, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, lowPass, normalize, grayScale, contrast, width, height, } = options;
+    if (filename && skipExtCheck) {
+        Jimp.read(filename, (err, image) => {
+            if (!err) {
+                continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, lowPass, normalize, grayScale, contrast, width, height, filename);
+            }
+        });
+        return;
+    }
     const supportedFormats = [".png", ".gif", ".jpg", ".jpeg"];
     let foundImage = false;
     // Attempt to read the image with different extensions
@@ -102,4 +111,10 @@ function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold,
     const outputFilename = `${outputFolder}/${baseFilename}_f${ditherAlgo}_c${colorLimit}_p${pixelSize}.png`;
     image.write(outputFilename);
     console.log(`Image saved: ${outputFilename}`);
+}
+// If used as a worker thread, get file name from message
+if (!worker_threads_1.isMainThread) {
+    const { filePath, options } = worker_threads_1.workerData;
+    options.filename = filePath;
+    processImage(options, true);
 }

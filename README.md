@@ -23,7 +23,8 @@ Reducing the colour palette with `colorLimit` is non-deterministic. You can retr
 ### Options
 
 ```
--f, --filename        Input image filename                 [string] [required]
+-f, --filename        Input image filename                            [string]
+-i, --folderPath      Input folder                                    [string]
 -s, --scale           Scale the image up or down by this factor
                                                          [number] [default: 1]
 -x, --contrast        Adjust contrast by a value between -1 and +1

@@ -3,6 +3,7 @@
 // @link https://github.com/sedthh/pyxelate/blob/master/pyxelate/pal.py
 // @license MIT
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.definedPalettesImport = void 0;
 const APPLE_II_HI = [
     { r: 0, g: 0, b: 0 },
     { r: 255, g: 255, b: 255 },
@@ -392,7 +393,7 @@ const ATARI_LYNX = [
     { r: 0, g: 0, b: 255 },
     { r: 255, g: 255, b: 0 }, // Yellow
 ];
-exports.default = {
+exports.definedPalettesImport = {
     APPLE_II_HI,
     GAMEBOY_ORIGINAL,
     GAMEBOY_COMBO_UP,

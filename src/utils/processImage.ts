@@ -1,6 +1,7 @@
 import * as Jimp from "jimp";
 import * as fs from "fs";
 import * as path from "path";
+import { workerData, isMainThread } from "worker_threads";
 
 import { definedPalettesImport } from "./definedPalettes";
 import { applyAlphaThreshold } from "./applyAlphaThreshold";
@@ -16,7 +17,7 @@ const customPaletteName = "CUSTOM";
 const definedPalettes = definedPalettesImport as typeof definedPalettesImport &
   Record<string, Color[]>;
 
-export function processImage(options: Options): void {
+export function processImage(options: Options, skipExtCheck?: boolean): void {
   const {
     filename,
     scale,
@@ -33,6 +34,31 @@ export function processImage(options: Options): void {
     width,
     height,
   } = options;
+
+  if (filename && skipExtCheck) {
+    Jimp.read(filename, (err, image) => {
+      if (!err) {
+        continueProcessing(
+          image,
+          scale,
+          pixelSize,
+          ditherAlgo,
+          alphaThreshold,
+          colorLimit,
+          palette,
+          customPalette,
+          lowPass,
+          normalize,
+          grayScale,
+          contrast,
+          width,
+          height,
+          filename,
+        );
+      }
+    });
+    return;
+  }
 
   const supportedFormats = [".png", ".gif", ".jpg", ".jpeg"];
   let foundImage = false;
@@ -161,4 +187,11 @@ function continueProcessing(
 
   image.write(outputFilename);
   console.log(`Image saved: ${outputFilename}`);
+}
+
+// If used as a worker thread, get file name from message
+if (!isMainThread) {
+  const { filePath, options } = workerData;
+  options.filename = filePath;
+  processImage(options, true);
 }

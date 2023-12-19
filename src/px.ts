@@ -1,13 +1,19 @@
 import * as yargs from "yargs";
+import * as os from "os";
 
 import { processImage } from "./utils/processImage";
+import { processPath } from "./utils/processPath";
 
 // Command line argument parsing
 const options = yargs
   .option("f", {
     alias: "filename",
     describe: "Input image filename",
-    demandOption: true,
+    type: "string",
+  })
+  .option("i", {
+    alias: "folderPath",
+    describe: "Input folder",
     type: "string",
   })
   .option("s", {
@@ -208,5 +214,15 @@ const options = yargs
     },
   }).argv as unknown as Options;
 
-// Invoke image processing with the parsed options
-processImage(options);
+if (options.filename !== undefined) {
+  processImage(options);
+} else if (options.folderPath !== undefined) {
+  let numCores = 2;
+  try {
+    numCores = os.cpus().length;
+  } catch (err) {
+    console.error(err);
+  }
+  numCores = Math.max(numCores - 1, 1);
+  processPath(options.folderPath, options, numCores);
+}

@@ -7,7 +7,8 @@ declare type Color = {
 declare type ColorKey = "r" | "g" | "b";
 
 declare type Options = {
-  filename: string;
+  filename: string | undefined;
+  folderPath: string | undefined;
   scale: number;
   pixelSize: number;
   ditherAlgo: string;
