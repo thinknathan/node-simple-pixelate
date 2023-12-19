@@ -1,14 +1,40 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Jimp = require("jimp");
-const fs = require("fs");
-const path = require("path");
-const yargs = require("yargs");
-const definedPalettesImport = require("./px-palettes");
+import * as Jimp from "jimp";
+import * as fs from "fs";
+import * as path from "path";
+import * as yargs from "yargs";
+import * as definedPalettesImport from "./px-palettes";
+
 const outputFolder = "output";
 const customPaletteName = "CUSTOM";
-const definedPalettes = definedPalettesImport;
-function processImage(options) {
+const definedPalettes = definedPalettesImport as typeof definedPalettesImport &
+  Record<string, Color[]>;
+
+type Color = {
+  r: number;
+  g: number;
+  b: number;
+};
+
+type ColorKey = "r" | "g" | "b";
+
+type Options = {
+  filename: string;
+  scale: number;
+  pixelSize: number;
+  ditherAlgo: string;
+  alphaThreshold: number;
+  colorLimit: number;
+  palette: string | undefined;
+  customPalette: Color[] | undefined;
+  lowPass: boolean;
+  normalize: boolean;
+  grayScale: boolean;
+  contrast: number;
+  width: number | undefined;
+  height: number | undefined;
+};
+
+function processImage(options: Options): void {
   const {
     filename,
     scale,
@@ -25,11 +51,14 @@ function processImage(options) {
     width,
     height,
   } = options;
+
   const supportedFormats = [".png", ".gif", ".jpg", ".jpeg"];
   let foundImage = false;
+
   // Attempt to read the image with different extensions
   supportedFormats.forEach((ext) => {
     const fullFilename = filename + ext;
+
     if (!foundImage) {
       Jimp.read(fullFilename, (err, image) => {
         if (!foundImage && !err) {
@@ -56,47 +85,54 @@ function processImage(options) {
     }
   });
 }
+
 function continueProcessing(
-  image,
-  scale,
-  pixelSize,
-  ditherAlgo,
-  alphaThreshold,
-  colorLimit,
-  palette,
-  customPalette,
-  lowPass,
-  normalize,
-  grayScale,
-  contrast,
-  width,
-  height,
-  inputFilename,
-) {
+  image: Jimp,
+  scale: number,
+  pixelSize: number,
+  ditherAlgo: string,
+  alphaThreshold: number,
+  colorLimit: number,
+  palette: string | undefined,
+  customPalette: Color[] | undefined,
+  lowPass: boolean,
+  normalize: boolean,
+  grayScale: boolean,
+  contrast: number,
+  width: number | undefined,
+  height: number | undefined,
+  inputFilename: string,
+): void {
   // RESIZE
   if (width || height) {
     image.resize(width ? width : Jimp.AUTO, height ? height : Jimp.AUTO);
   } else {
     image.scale(scale);
   }
+
   // NORMALIZE
   if (normalize) {
     image.normalize();
   }
+
   // CONTRAST
   if (contrast !== 0) {
     image.contrast(contrast);
   }
+
   // LOW PASS
   if (lowPass) {
     applyLowPassFilter(image);
   }
+
   // OPACITY
   applyAlphaThreshold(image, alphaThreshold);
+
   // GRAYSCALE
   if (grayScale) {
     image.greyscale();
   }
+
   // DITHERING
   if (ditherAlgo === "floyd") {
     image.dither565();
@@ -105,10 +141,12 @@ function continueProcessing(
   } else if (ditherAlgo === "bayer") {
     applyBayerDithering(image);
   }
+
   // PIXELATE
   if (pixelSize > 0) {
     image.pixelate(pixelSize);
   }
+
   if (customPalette) {
     // USER-DEFINED PALETTE
     definedPalettes[customPaletteName] = customPalette;
@@ -126,21 +164,26 @@ function continueProcessing(
       applyPalette(image, customPaletteName);
     }
   }
+
   // Create a folder for output if it doesn't exist
   if (!fs.existsSync(outputFolder)) {
     fs.mkdirSync(outputFolder);
   }
+
   // Incorporate the input filename into the output filename
   const baseFilename = path.basename(
     inputFilename,
     path.extname(inputFilename),
   );
   const outputFilename = `${outputFolder}/${baseFilename}_f${ditherAlgo}_c${colorLimit}_p${pixelSize}.png`;
+
   image.write(outputFilename);
   console.log(`Image saved: ${outputFilename}`);
 }
-function medianCut(image, colorLimit) {
-  const pixels = [];
+
+function medianCut(image: Jimp, colorLimit: number): Color[] {
+  const pixels: Color[] = [];
+
   // Collect all pixels from the image
   image.scan(
     0,
@@ -156,8 +199,9 @@ function medianCut(image, colorLimit) {
       });
     },
   );
+
   // Recursive function to split the color space
-  function recursiveMedianCut(pixelArray, depth) {
+  function recursiveMedianCut(pixelArray: Color[], depth: number): Color[] {
     if (depth === 0 || pixelArray.length <= colorLimit) {
       // Average color of pixels in the current cube
       const averageColor = pixelArray.reduce(
@@ -168,6 +212,7 @@ function medianCut(image, colorLimit) {
         }),
         { r: 0, g: 0, b: 0 },
       );
+
       const numPixels = pixelArray.length;
       return [
         {
@@ -177,13 +222,19 @@ function medianCut(image, colorLimit) {
         },
       ];
     }
+
     // Randomly choose an axis to split
-    const randomAxis = ["r", "g", "b"][Math.floor(Math.random() * 3)];
+    const randomAxis = ["r", "g", "b"][
+      Math.floor(Math.random() * 3)
+    ] as ColorKey;
+
     // Sort the channel values for the chosen axis
     const sortedChannel = pixelArray
       .map((pixel) => pixel[randomAxis])
       .sort((a, b) => a - b);
+
     const medianIndex = Math.floor(sortedChannel.length / 2);
+
     // Split the pixel array into two halves based on the chosen axis
     const firstHalf = pixelArray.filter(
       (pixel) => pixel[randomAxis] <= sortedChannel[medianIndex],
@@ -191,34 +242,42 @@ function medianCut(image, colorLimit) {
     const secondHalf = pixelArray.filter(
       (pixel) => pixel[randomAxis] > sortedChannel[medianIndex],
     );
+
     // Recursively process both halves
     const firstHalfColors = recursiveMedianCut(firstHalf, depth - 1);
     const secondHalfColors = recursiveMedianCut(secondHalf, depth - 1);
+
     // Combine and return the colors from both halves
     return [...firstHalfColors, ...secondHalfColors];
   }
+
   // Perform median cut and get the reduced color palette
   const colorPalette = recursiveMedianCut(
     pixels,
     Math.ceil(Math.log2(colorLimit)),
   );
+
   // Output the color palette in the specified format
-  const formattedPalette = colorPalette.map((color) => ({
+  const formattedPalette: Color[] = colorPalette.map((color: Color) => ({
     r: color.r,
     g: color.g,
     b: color.b,
     // You can add color names or any other information here if needed
   }));
+
   return formattedPalette;
 }
-function applyBayerDithering(image) {
+
+function applyBayerDithering(image: Jimp) {
   const bayerMatrix = [
     [0, 8, 2, 10],
     [12, 4, 14, 6],
     [3, 11, 1, 9],
     [15, 7, 13, 5],
   ];
+
   const { width, height } = image.bitmap;
+
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       const oldColor = Jimp.intToRGBA(image.getPixelColor(x, y));
@@ -236,9 +295,11 @@ function applyBayerDithering(image) {
     }
   }
 }
-function applyAlphaThreshold(image, alphaThreshold) {
+
+function applyAlphaThreshold(image: Jimp, alphaThreshold: number): void {
   // ALPHA THRESHOLD
   const threshold = Math.round(alphaThreshold * 255); // Convert threshold to 0-255 range
+
   image.scan(
     0,
     0,
@@ -250,7 +311,8 @@ function applyAlphaThreshold(image, alphaThreshold) {
     },
   );
 }
-function applyBWThreshold(image) {
+
+function applyBWThreshold(image: Jimp): void {
   const threshold = 128; // Adjust this threshold as needed
   image.scan(
     0,
@@ -262,10 +324,13 @@ function applyBWThreshold(image) {
       const green = this.bitmap.data[idx + 1];
       const blue = this.bitmap.data[idx + 2];
       const alpha = this.bitmap.data[idx + 3];
+
       // Calculate luminance (a common method for grayscale conversion)
       const luminance = 0.299 * red + 0.587 * green + 0.114 * blue;
+
       // Set the pixel to black or white based on the threshold
       const newValue = luminance > threshold ? 255 : 0;
+
       // Set red, green, and blue channels to the new value
       this.bitmap.data[idx + 0] = newValue;
       this.bitmap.data[idx + 1] = newValue;
@@ -273,8 +338,10 @@ function applyBWThreshold(image) {
     },
   );
 }
-function applyAtkinsonDithering(image) {
+
+function applyAtkinsonDithering(image: Jimp): void {
   const { width, height } = image.bitmap;
+
   for (let y = 0; y < height - 1; y++) {
     for (let x = 1; x < width - 1; x++) {
       const oldColor = Jimp.intToRGBA(image.getPixelColor(x, y));
@@ -289,9 +356,11 @@ function applyAtkinsonDithering(image) {
         x,
         y,
       );
+
       const quantErrorR = oldColor.r - newColor.r;
       const quantErrorG = oldColor.g - newColor.g;
       const quantErrorB = oldColor.b - newColor.b;
+
       // Distribute the error to neighboring pixels
       distributeError(
         image,
@@ -350,33 +419,39 @@ function applyAtkinsonDithering(image) {
     }
   }
 }
+
 function distributeError(
-  image,
-  x,
-  y,
-  quantErrorR,
-  quantErrorG,
-  quantErrorB,
-  factor,
-) {
+  image: Jimp,
+  x: number,
+  y: number,
+  quantErrorR: number,
+  quantErrorG: number,
+  quantErrorB: number,
+  factor: number,
+): void {
   const oldColor = Jimp.intToRGBA(image.getPixelColor(x, y));
+
   const newColor = {
     r: clamp(oldColor.r + quantErrorR * factor, 0, 255),
     g: clamp(oldColor.g + quantErrorG * factor, 0, 255),
     b: clamp(oldColor.b + quantErrorB * factor, 0, 255),
     a: oldColor.a,
   };
+
   image.setPixelColor(
     Jimp.rgbaToInt(newColor.r, newColor.g, newColor.b, newColor.a),
     x,
     y,
   );
 }
-function clamp(value, min, max) {
+
+function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(value, max));
 }
-function applyLowPassFilter(image) {
+
+function applyLowPassFilter(image: Jimp): void {
   const { width, height } = image.bitmap;
+
   for (let y = 1; y < height - 1; y++) {
     for (let x = 1; x < width - 1; x++) {
       const neighbors = [
@@ -390,12 +465,14 @@ function applyLowPassFilter(image) {
         image.getPixelColor(x, y + 1),
         image.getPixelColor(x + 1, y + 1),
       ];
+
       const averageColor = {
         r: 0,
         g: 0,
         b: 0,
         a: 0,
       };
+
       neighbors.forEach((neighbor) => {
         const rgba = Jimp.intToRGBA(neighbor);
         averageColor.r += rgba.r;
@@ -403,10 +480,12 @@ function applyLowPassFilter(image) {
         averageColor.b += rgba.b;
         averageColor.a += rgba.a;
       });
+
       averageColor.r /= neighbors.length;
       averageColor.g /= neighbors.length;
       averageColor.b /= neighbors.length;
       averageColor.a /= neighbors.length;
+
       image.setPixelColor(
         Jimp.rgbaToInt(
           averageColor.r,
@@ -420,8 +499,9 @@ function applyLowPassFilter(image) {
     }
   }
 }
+
 // Function to find the closest color in the palette
-function findClosestColor(targetColor, palette) {
+function findClosestColor(targetColor: Color, palette: Color[]): Color {
   return palette.reduce((closest, current) => {
     const distanceTarget =
       Math.abs(targetColor.r - closest.r) +
@@ -434,12 +514,15 @@ function findClosestColor(targetColor, palette) {
     return distanceCurrent < distanceTarget ? current : closest;
   });
 }
-function applyPalette(image, palette) {
+
+function applyPalette(image: Jimp, palette: string): void {
   if (!definedPalettes[palette]) {
     console.error(`${palette} not found in predefined palettes.`);
     return;
   }
+
   const chosenPalette = definedPalettes[palette];
+
   // Apply the custom palette
   image.scan(
     0,
@@ -449,6 +532,7 @@ function applyPalette(image, palette) {
     function (x, y, idx) {
       const pixelColor = Jimp.intToRGBA(this.getPixelColor(x, y));
       const closestColor = findClosestColor(pixelColor, chosenPalette);
+
       // Set the pixel to the closest color in the palette
       this.setPixelColor(
         Jimp.rgbaToInt(
@@ -463,6 +547,7 @@ function applyPalette(image, palette) {
     },
   );
 }
+
 // Command line argument parsing
 const options = yargs
   .option("f", {
@@ -599,6 +684,7 @@ const options = yargs
     coerce: (value) => {
       // Convert the string to a proper array representation
       const parsedArray = JSON.parse(`[${value.join("")}]`).pop();
+
       // Validate the format and range of values
       if (
         Array.isArray(parsedArray) &&
@@ -612,7 +698,9 @@ const options = yargs
             ),
         )
       ) {
-        parsedArray.map((color) => color.map((channel) => Math.round(channel)));
+        parsedArray.map((color) =>
+          color.map((channel: number) => Math.round(channel)),
+        );
         return parsedArray.map((color) => ({
           r: color[0],
           g: color[1],
@@ -664,6 +752,7 @@ const options = yargs
       }
       return Math.round(value);
     },
-  }).argv;
+  }).argv as unknown as Options;
+
 // Invoke image processing with the parsed options
 processImage(options);
