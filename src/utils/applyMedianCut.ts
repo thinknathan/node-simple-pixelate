@@ -58,7 +58,7 @@ export function applyMedianCut(
 
     // Choose the axis to split (randomly or deterministically)
     const chosenAxis = random
-      ? (["r", "g", "b"][Math.floor(Math.random() * 3)] as ColorKey)
+      ? (["r", "g", "b"] as const)[Math.floor(Math.random() * 3)]
       : determineAxis(pixelArray);
 
     // Sort the channel values for the chosen axis
