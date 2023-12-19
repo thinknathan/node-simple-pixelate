@@ -1,6 +1,6 @@
 {
   "name": "node-simple-pixelate",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Pixelizes images to create pixel art.",
   "repository": {
     "type": "git",
@@ -11,7 +11,8 @@
   "type": "commonjs",
   "main": "px.cjs",
   "files": [
-    "px.cjs"
+    "px.cjs",
+    "utils"
   ],
   "scripts": {
     "build": "tsc && npm run renameCjs && npm run prettier",
