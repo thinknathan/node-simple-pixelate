@@ -26,7 +26,7 @@
     "typescript": "~5.2.2"
   },
   "dependencies": {
-    "jimp": "^0.22.10",
+    "jimp": "~0.22.10",
     "yargs": "^17.7.2"
   }
 }
