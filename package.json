@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "tsc && npm run renameCjs && npm run prettier",
-    "renameCjs": "node -e \"require('fs').renameSync('px.js', 'px.cjs')\" && node -e \"require('fs').renameSync('px-palettes.js', 'px-palettes.cjs')\"",
+    "renameCjs": "node -e \"require('fs').renameSync('px.js', 'px.cjs')\"",
     "prettier": "prettier \"./**/*.{ts,d.ts,cjs,md,json}\" --write"
   },
   "devDependencies": {
