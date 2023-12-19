@@ -53,7 +53,7 @@ function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold,
     if (width || height) {
         image.resize(width ? width : Jimp.AUTO, height ? height : Jimp.AUTO);
     }
-    else {
+    else if (scale !== 1) {
         image.scale(scale);
     }
     // NORMALIZE
@@ -114,7 +114,7 @@ function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold,
     }
     // Incorporate the input filename into the output filename
     const baseFilename = path.basename(inputFilename, path.extname(inputFilename));
-    const outputFilename = `${outputFolder}/${baseFilename}_f${ditherAlgo}_c${colorLimit}_p${pixelSize}.png`;
+    const outputFilename = `${outputFolder}/${baseFilename}_${ditherAlgo}_c${colorLimit}_p${pixelSize}.png`;
     image.write(outputFilename);
     console.log(`Image saved: ${outputFilename}`);
 }
