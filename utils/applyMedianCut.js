@@ -8,7 +8,7 @@ const Jimp = require("jimp");
  *
  * @returns An array of Color objects representing the reduced color palette.
  */
-function applyMedianCut(image, colorLimit) {
+function applyMedianCut(image, colorLimit, useRandom) {
     const pixels = [];
     // Collect all pixels from the image
     image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
@@ -20,7 +20,7 @@ function applyMedianCut(image, colorLimit) {
         });
     });
     // Recursive function to split the color space
-    function recursiveMedianCut(pixelArray, depth) {
+    function recursiveMedianCut(pixelArray, depth, random) {
         if (depth === 0 || pixelArray.length <= colorLimit) {
             // Average color of pixels in the current cube
             const averageColor = pixelArray.reduce((acc, pixel) => ({
@@ -37,24 +37,37 @@ function applyMedianCut(image, colorLimit) {
                 },
             ];
         }
-        // Randomly choose an axis to split
-        const randomAxis = ["r", "g", "b"][Math.floor(Math.random() * 3)];
+        // Choose the axis to split (randomly or deterministically)
+        const chosenAxis = random
+            ? ["r", "g", "b"][Math.floor(Math.random() * 3)]
+            : determineAxis(pixelArray);
         // Sort the channel values for the chosen axis
         const sortedChannel = pixelArray
-            .map((pixel) => pixel[randomAxis])
+            .map((pixel) => pixel[chosenAxis])
             .sort((a, b) => a - b);
         const medianIndex = Math.floor(sortedChannel.length / 2);
         // Split the pixel array into two halves based on the chosen axis
-        const firstHalf = pixelArray.filter((pixel) => pixel[randomAxis] <= sortedChannel[medianIndex]);
-        const secondHalf = pixelArray.filter((pixel) => pixel[randomAxis] > sortedChannel[medianIndex]);
+        const firstHalf = pixelArray.filter((pixel) => pixel[chosenAxis] <= sortedChannel[medianIndex]);
+        const secondHalf = pixelArray.filter((pixel) => pixel[chosenAxis] > sortedChannel[medianIndex]);
         // Recursively process both halves
-        const firstHalfColors = recursiveMedianCut(firstHalf, depth - 1);
-        const secondHalfColors = recursiveMedianCut(secondHalf, depth - 1);
+        const firstHalfColors = recursiveMedianCut(firstHalf, depth - 1, random);
+        const secondHalfColors = recursiveMedianCut(secondHalf, depth - 1, random);
         // Combine and return the colors from both halves
         return [...firstHalfColors, ...secondHalfColors];
     }
+    // Determine the axis based on the average channel value
+    function determineAxis(pixelArray) {
+        const averageValues = {
+            r: pixelArray.reduce((sum, pixel) => sum + pixel.r, 0) / pixelArray.length,
+            g: pixelArray.reduce((sum, pixel) => sum + pixel.g, 0) / pixelArray.length,
+            b: pixelArray.reduce((sum, pixel) => sum + pixel.b, 0) / pixelArray.length,
+        };
+        // Find the axis with the maximum average value
+        const chosenAxis = Object.keys(averageValues).reduce((a, b) => averageValues[a] > averageValues[b] ? a : b);
+        return chosenAxis;
+    }
     // Perform median cut and get the reduced color palette
-    const colorPalette = recursiveMedianCut(pixels, Math.ceil(Math.log2(colorLimit)));
+    const colorPalette = recursiveMedianCut(pixels, Math.ceil(Math.log2(colorLimit)), useRandom);
     // Output the color palette in the specified format
     const formattedPalette = colorPalette.map((color) => ({
         r: color.r,

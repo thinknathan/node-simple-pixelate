@@ -33,6 +33,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
     colorLimit,
     palette,
     customPalette,
+    randomColor,
     lowPass,
     normalize,
     grayScale,
@@ -53,6 +54,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
           colorLimit,
           palette,
           customPalette,
+          randomColor,
           lowPass,
           normalize,
           grayScale,
@@ -86,6 +88,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
             colorLimit,
             palette,
             customPalette,
+            randomColor,
             lowPass,
             normalize,
             grayScale,
@@ -109,6 +112,7 @@ function continueProcessing(
   colorLimit: number,
   palette: string | undefined,
   customPalette: Color[] | undefined,
+  randomColor: boolean,
   lowPass: boolean,
   normalize: boolean,
   grayScale: boolean,
@@ -174,7 +178,11 @@ function continueProcessing(
     if (colorLimit === 2) {
       applyBWThreshold(image);
     } else {
-      definedPalettes[customPaletteName] = applyMedianCut(image, colorLimit);
+      definedPalettes[customPaletteName] = applyMedianCut(
+        image,
+        colorLimit,
+        randomColor,
+      );
       applyPalette(image, customPaletteName, definedPalettes);
     }
   }

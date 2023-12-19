@@ -20,6 +20,7 @@ declare type Options = {
   normalize: boolean;
   grayScale: boolean;
   contrast: number;
+  randomColor: boolean;
   width: number | undefined;
   height: number | undefined;
 };

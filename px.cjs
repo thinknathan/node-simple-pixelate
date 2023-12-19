@@ -176,6 +176,12 @@ const options = yargs
     type: "boolean",
     default: false,
   })
+  .option("r", {
+    alias: "randomColor",
+    describe: "Use randomness when reducing palette to colorLimit",
+    type: "boolean",
+    default: true,
+  })
   .option("n", {
     alias: "normalize",
     describe: "Normalize image colour for consistency",

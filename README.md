@@ -18,8 +18,6 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
 
 `node px.cjs`
 
-Reducing the colour palette with `colorLimit` is non-deterministic. You can retry the same image to get different results.
-
 ### Options
 
 ```
@@ -53,6 +51,8 @@ Reducing the colour palette with `colorLimit` is non-deterministic. You can retr
                                                                         [array]
 -l, --lowPass         Use lowpass filter to reduce noise
                                                    [boolean] [default: false]
+-r, --randomColor     Use randomness when reducing palette to colorLimit
+                                                      [boolean] [default: true]
 -n, --normalize       Normalize image colour for consistency
                                                       [boolean] [default: true]
 -g, --grayScale       Transform image to grayscale  [boolean] [default: false]

@@ -8,10 +8,10 @@ const path = require("path");
  */
 class WorkerPool {
     /**
-    * Creates a new WorkerPool instance.
-    *
-    * @param maxWorkers - The maximum number of worker threads in the pool.
-    */
+     * Creates a new WorkerPool instance.
+     *
+     * @param maxWorkers - The maximum number of worker threads in the pool.
+     */
     constructor(maxWorkers) {
         this.workers = [];
         this.taskQueue = [];
@@ -48,11 +48,11 @@ class WorkerPool {
         }
     }
     /**
-    * Adds a task to the worker pool for processing.
-    *
-    * @param filePath - The path of the file to process.
-    * @param options - Image processing options for the file.
-    */
+     * Adds a task to the worker pool for processing.
+     *
+     * @param filePath - The path of the file to process.
+     * @param options - Image processing options for the file.
+     */
     addTask(filePath, options) {
         if (this.workers.length < this.maxWorkers) {
             this.createWorker(filePath, options);
@@ -62,8 +62,8 @@ class WorkerPool {
         }
     }
     /**
-    * Waits for all tasks to complete before exiting.
-    */
+     * Waits for all tasks to complete before exiting.
+     */
     waitForCompletion() {
         this.workers.forEach((worker) => {
             worker.on("exit", () => {

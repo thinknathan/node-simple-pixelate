@@ -23,11 +23,11 @@ const definedPalettes = definedPalettes_1.definedPalettesImport;
  * @param skipExtCheck - (Optional) Skips extension check if set to true.
  */
 function processImage(options, skipExtCheck) {
-    const { filename, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, lowPass, normalize, grayScale, contrast, width, height, } = options;
+    const { filename, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, } = options;
     if (filename && skipExtCheck) {
         Jimp.read(filename, (err, image) => {
             if (!err) {
-                continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, lowPass, normalize, grayScale, contrast, width, height, filename);
+                continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, filename);
             }
         });
         return;
@@ -41,14 +41,14 @@ function processImage(options, skipExtCheck) {
             Jimp.read(fullFilename, (err, image) => {
                 if (!foundImage && !err) {
                     foundImage = true;
-                    continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, lowPass, normalize, grayScale, contrast, width, height, fullFilename);
+                    continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, fullFilename);
                 }
             });
         }
     });
 }
 exports.processImage = processImage;
-function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, lowPass, normalize, grayScale, contrast, width, height, inputFilename) {
+function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, inputFilename) {
     // RESIZE
     if (width || height) {
         image.resize(width ? width : Jimp.AUTO, height ? height : Jimp.AUTO);
@@ -104,7 +104,7 @@ function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold,
             (0, applyBWThreshold_1.applyBWThreshold)(image);
         }
         else {
-            definedPalettes[customPaletteName] = (0, applyMedianCut_1.applyMedianCut)(image, colorLimit);
+            definedPalettes[customPaletteName] = (0, applyMedianCut_1.applyMedianCut)(image, colorLimit, randomColor);
             (0, applyPalette_1.applyPalette)(image, customPaletteName, definedPalettes);
         }
     }
