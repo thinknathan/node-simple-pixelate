@@ -23,3 +23,5 @@ Thumbs.db
 *.bmp
 *.tiff
 *.gif
+!docs/*.png
+!docs/*.jpg
