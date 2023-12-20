@@ -190,3 +190,11 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
 ## Background
 
 Created with Chat-GPT 3.5.
+
+## License
+
+This repo is [CC0-1.0](LICENSE) unless otherwise specified.
+
+`definedPalettes.ts` is adapted from [pyxelate](https://github.com/sedthh/pyxelate) and carries their MIT license.
+
+Images in `docs` carry the [Unsplash License](https://unsplash.com/license).
