@@ -4,23 +4,20 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
 
 ## Examples
 
+- `--colorLimit 16`
+
+  - <img src="docs/melody.jpg" alt="Cartoon face on box in front of full coffee cup"> <img src="docs/melody-d_none-c_16.png" alt="Cartoon face in limited 16-colour palette">
+  - [Photo source]()
+
 - `--colorLimit 2 --ditherAlgo atkinson --contrast -0.09`
 
-  - <img src="docs/sharon.jpg" alt="Shirtless man">
-  - <img src="docs/sharon-d_atkinson-c_2.png" alt="Shirtless man in dithered black and white style">
+  - <img src="docs/sharon.jpg" alt="Shirtless man on dark background"> <img src="docs/sharon-d_atkinson-c_2.png" alt="Shirtless man in dithered black and white style">
   - [Photo source](https://unsplash.com/photos/grayscale-photo-of-topless-man-JiSjwGZ-1nA)
 
-- `--colorLimit 12 --contrast -0.1`
+- `--ditherAlgo floyd`
 
-  - <img src="docs/uli.jpg" alt="Woman with illusion of multiple arms">
-  - <img src="docs/uli-d_none-c_12.png" alt="Woman with illusion of multiple arms with limited colour palette">
-  - [Photo source](https://unsplash.com/photos/a-woman-in-a-black-bikini-top-with-her-arms-in-the-air-EqphlyobpEg)
-
-- `--ditherAlgo floyd --colorLimit 12`
-
-  - <img src="docs/neom.jpg" alt="Scuba diver">
-  - <img src="docs/neom-d_floyd-c_12.png" alt="Scuba diver with limited colour palette and dithering">
-  - [Photo source](https://unsplash.com/photos/a-person-swimming-in-a-cave-with-sunbeams-CuoJHB42D1I)
+  - <img src="docs/single.jpg" alt="Single tree in snowy landscape"> <img src="docs/single-d_floyd-c_8.png" alt="Single tree in 8 colour palette with banding reduced by dithering">
+  - [Photo source]()
 
 ## Install
 
