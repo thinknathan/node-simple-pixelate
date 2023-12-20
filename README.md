@@ -40,6 +40,11 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
   - Purpose: Scales the image up or down by a factor.
   - Use Case: Allows you to resize images to a desired scale, useful for adjusting image dimensions.
 
+- `afterScale` (-a):
+
+  - Purpose: Rescales the image up or down by this factor, as the last step.
+  - Use Case: Allows you to resize the final image up, creating a blocky look that may be more pleasing than using `pixelSize`.
+
 - `contrast` (-x):
 
   - Purpose: Adjusts contrast by a value between -1 and +1.
@@ -52,7 +57,7 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
 
 - `ditherAlgo` (-d):
 
-  - Purpose: Specifies the dithering algorithm: floyd, bayer, atkinson, or none.
+  - Purpose: Specifies the dithering algorithm: `floyd`, `bayer`, `atkinson`, or `none`.
   - Use Case: Dithering is a technique used to reduce color banding in images; you can choose the algorithm that provides the desired result.
 
 - `alphaThreshold` (-t):
@@ -146,11 +151,11 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
 
 - `width` (-w):
 
-  - Purpose: Specifies the output image width. Overrides `scale`.
+  - Purpose: Specifies the output image width. Overrides `scale` and `afterScale`.
   - Use Case: Allows you to set a specific width for your output image.
 
 - `height` (-h):
-  - Purpose: Specifies the output image height. Overrides `scale`.
+  - Purpose: Specifies the output image height. Overrides `scale` and `afterScale`.
   - Use Case: Allows you to set a specific height for your output image.
 
 ## Background

@@ -23,7 +23,7 @@ const definedPalettes = definedPalettes_1.definedPalettesImport;
  * @param skipExtCheck - (Optional) Skips extension check if set to true.
  */
 function processImage(options, skipExtCheck) {
-    const { filename, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, } = options;
+    const { filename, scale, afterScale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, } = options;
     if (filename) {
         Jimp.read(filename, (err, image) => {
             if (err && skipExtCheck) {
@@ -32,7 +32,7 @@ function processImage(options, skipExtCheck) {
             else {
                 // Continue if image is successfully read
                 if (image) {
-                    continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, filename);
+                    continueProcessing(image, scale, afterScale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, filename);
                     return;
                 }
             }
@@ -51,14 +51,14 @@ function processImage(options, skipExtCheck) {
             Jimp.read(fullFilename, (err, image) => {
                 if (!foundImage && !err) {
                     foundImage = true;
-                    continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, fullFilename);
+                    continueProcessing(image, scale, afterScale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, fullFilename);
                 }
             });
         }
     });
 }
 exports.processImage = processImage;
-function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, inputFilename) {
+function continueProcessing(image, scale, afterScale, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, inputFilename) {
     // RESIZE
     if (width || height) {
         image.resize(width ? width : Jimp.AUTO, height ? height : Jimp.AUTO);
@@ -117,6 +117,9 @@ function continueProcessing(image, scale, pixelSize, ditherAlgo, alphaThreshold,
             definedPalettes[customPaletteName] = (0, applyMedianCut_1.applyMedianCut)(image, colorLimit, randomColor);
             (0, applyPalette_1.applyPalette)(image, customPaletteName, definedPalettes);
         }
+    }
+    if (!(width || height) && afterScale !== 1) {
+        image.scale(afterScale, Jimp.RESIZE_NEAREST_NEIGHBOR);
     }
     // Create a folder for output if it doesn't exist
     if (!fs.existsSync(outputFolder)) {

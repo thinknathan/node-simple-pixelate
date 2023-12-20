@@ -27,6 +27,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
   const {
     filename,
     scale,
+    afterScale,
     pixelSize,
     ditherAlgo,
     alphaThreshold,
@@ -52,6 +53,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
           continueProcessing(
             image,
             scale,
+            afterScale,
             pixelSize,
             ditherAlgo,
             alphaThreshold,
@@ -92,6 +94,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
           continueProcessing(
             image,
             scale,
+            afterScale,
             pixelSize,
             ditherAlgo,
             alphaThreshold,
@@ -116,6 +119,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
 function continueProcessing(
   image: Jimp,
   scale: number,
+  afterScale: number,
   pixelSize: number,
   ditherAlgo: string,
   alphaThreshold: number,
@@ -195,6 +199,10 @@ function continueProcessing(
       );
       applyPalette(image, customPaletteName, definedPalettes);
     }
+  }
+
+  if (!(width || height) && afterScale !== 1) {
+    image.scale(afterScale, Jimp.RESIZE_NEAREST_NEIGHBOR);
   }
 
   // Create a folder for output if it doesn't exist

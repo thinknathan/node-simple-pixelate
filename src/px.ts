@@ -30,6 +30,18 @@ const options = yargs
       return value;
     },
   })
+  .option("a", {
+    alias: "afterScale",
+    describe: "Rescale the image up or down by this factor, as the last step",
+    type: "number",
+    default: 1,
+    coerce: (value) => {
+      if (value <= 0) {
+        throw new Error("scale should be > 0");
+      }
+      return value;
+    },
+  })
   .option("x", {
     alias: "contrast",
     describe: "Adjust contrast by a value between -1 and +1",

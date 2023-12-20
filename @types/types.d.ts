@@ -10,6 +10,7 @@ declare type Options = {
   filename: string | undefined;
   folderPath: string | undefined;
   scale: number;
+  afterScale: number;
   pixelSize: number;
   ditherAlgo: string;
   alphaThreshold: number;
