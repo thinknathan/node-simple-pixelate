@@ -4,19 +4,21 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
 
 ## Examples
 
-`px -f sharon -c 2 -d atkinson -x -0.09`
-<img src="docs/sharon.jpg" alt="Shirtless man">
-<img src="docs/sharon-d_atkinson-c_2.png" alt="Shirtless man in dithered black and white style">
-[Photo source](https://unsplash.com/photos/grayscale-photo-of-topless-man-JiSjwGZ-1nA) 
+- `px -f sharon -c 2 -d atkinson -x -0.09`
 
-`px -f uli -c 12 -x -0.1`
-<img src="docs/uli.jpg" alt="Woman with illusion of multiple arms">
-<img src="docs/uli-d_none-c_12.png" alt="Woman with illusion of multiple arms with limited colour palette">
+<img src="docs/sharon.jpg" alt="Shirtless man"> <img src="docs/sharon-d_atkinson-c_2.png" alt="Shirtless man in dithered black and white style">
+
+[Photo source](https://unsplash.com/photos/grayscale-photo-of-topless-man-JiSjwGZ-1nA)
+
+- `px -f uli -c 12 -x -0.1`
+
+<img src="docs/uli.jpg" alt="Woman with illusion of multiple arms"> <img src="docs/uli-d_none-c_12.png" alt="Woman with illusion of multiple arms with limited colour palette">
+
 [Photo source](https://unsplash.com/photos/a-woman-in-a-black-bikini-top-with-her-arms-in-the-air-EqphlyobpEg)
 
-`px -f neom -d floyd -c 12`
-<img src="docs/neom.jpg" alt="Scuba diver">
-<img src="docs/neom-d_floyd-c_12.png" alt="Scuba diver with limited colour palette and dithering">
+- `px -f neom -d floyd -c 12`
+  <img src="docs/neom.jpg" alt="Scuba diver"> <img src="docs/neom-d_floyd-c_12.png" alt="Scuba diver with limited colour palette and dithering">
+
 [Photo source](https://unsplash.com/photos/a-person-swimming-in-a-cave-with-sunbeams-CuoJHB42D1I)
 
 ## Install
