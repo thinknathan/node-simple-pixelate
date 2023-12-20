@@ -28,6 +28,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
     filename,
     scale,
     afterScale,
+    cubic,
     pixelSize,
     ditherAlgo,
     alphaThreshold,
@@ -54,6 +55,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
             image,
             scale,
             afterScale,
+            cubic,
             pixelSize,
             ditherAlgo,
             alphaThreshold,
@@ -95,6 +97,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
             image,
             scale,
             afterScale,
+            cubic,
             pixelSize,
             ditherAlgo,
             alphaThreshold,
@@ -120,6 +123,7 @@ function continueProcessing(
   image: Jimp,
   scale: number,
   afterScale: number,
+  cubic: boolean,
   pixelSize: number,
   ditherAlgo: string,
   alphaThreshold: number,
@@ -137,9 +141,13 @@ function continueProcessing(
 ): void {
   // RESIZE
   if (width || height) {
-    image.resize(width ? width : Jimp.AUTO, height ? height : Jimp.AUTO);
+    image.resize(
+      width ? width : Jimp.AUTO,
+      height ? height : Jimp.AUTO,
+      cubic ? Jimp.RESIZE_BICUBIC : Jimp.RESIZE_BILINEAR,
+    );
   } else if (scale !== 1) {
-    image.scale(scale);
+    image.scale(scale, cubic ? Jimp.RESIZE_BICUBIC : Jimp.RESIZE_BILINEAR);
   }
 
   // NORMALIZE

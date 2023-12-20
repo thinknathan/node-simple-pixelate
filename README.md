@@ -45,6 +45,12 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
   - Purpose: Rescales the image up or down by this factor, as the last step.
   - Use Case: Allows you to resize the final image up, creating a blocky look that may be more pleasing than using `pixelSize`.
 
+- `cubic` (-u):
+
+  - Purpose: Uses bicubic interpolation instead of bilinear for initial resizing.
+  - Use Case: Enables a smoother, more accurate resizing technique that is slower. Has no effect on `afterScale` which always uses nearest neighbour.
+  - Default: true
+
 - `contrast` (-x):
 
   - Purpose: Adjusts contrast by a value between -1 and +1.
@@ -64,11 +70,13 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
 
   - Purpose: Adjusts transparent pixels to hide/show based on threshold.
   - Use Case: Useful for controlling the visibility of transparent pixels in your image.
+  - Default: 0.6
 
 - `colorLimit` (-c):
 
   - Purpose: Limits the number of colors in the output image.
   - Use Case: Useful for creating images with a reduced color palette, which can be desirable for certain artistic or display constraints.
+  - Default: 8
 
 - `palette` (-p):
 
@@ -133,21 +141,25 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
 
   - Purpose: Uses a lowpass filter to reduce noise.
   - Use Case: Useful for improving image quality by reducing noise.
+  - Default: false
 
 - `randomColor` (-r):
 
   - Purpose: Uses randomness when reducing the palette to colorLimit.
   - Use Case: Adds a random element to color reduction, providing variation in your output.
+  - Default: true
 
 - `normalize` (-n):
 
   - Purpose: Normalizes image color for consistency.
   - Use Case: Ensures consistent color representation across your images.
+  - Default: true
 
 - `grayScale` (-g):
 
   - Purpose: Transforms the image to grayscale.
   - Use Case: Converts your image to black and white, useful for specific artistic effects.
+  - Default: false
 
 - `width` (-w):
 

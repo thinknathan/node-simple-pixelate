@@ -193,6 +193,13 @@ const options = yargs
     type: "boolean",
     default: false,
   })
+  .option("u", {
+    alias: "cubic",
+    describe:
+      "Uses bicubic interpolation instead of bilinear for initial resizing",
+    type: "boolean",
+    default: true,
+  })
   .option("r", {
     alias: "randomColor",
     describe: "Use randomness when reducing palette to colorLimit",

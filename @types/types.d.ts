@@ -11,6 +11,7 @@ declare type Options = {
   folderPath: string | undefined;
   scale: number;
   afterScale: number;
+  cubic: boolean;
   pixelSize: number;
   ditherAlgo: string;
   alphaThreshold: number;
