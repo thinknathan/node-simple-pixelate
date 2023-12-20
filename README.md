@@ -7,7 +7,7 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
 - `--colorLimit 16`
 
   - <img src="docs/melody.jpg" alt="Cartoon face on box in front of full coffee cup"> <img src="docs/melody-d_none-c_16.png" alt="Cartoon face in limited 16-colour palette">
-  - [Photo source]()
+  - [Photo source](https://unsplash.com/photos/a-cup-of-coffee-sitting-on-top-of-a-white-table-McEh5jAOD3w)
 
 - `--colorLimit 2 --ditherAlgo atkinson --contrast -0.09`
 
@@ -17,7 +17,7 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
 - `--ditherAlgo floyd`
 
   - <img src="docs/single.jpg" alt="Single tree in snowy landscape"> <img src="docs/single-d_floyd-c_8.png" alt="Single tree in 8 colour palette with banding reduced by dithering">
-  - [Photo source]()
+  - [Photo source](https://unsplash.com/photos/a-lone-tree-in-the-middle-of-a-snowy-field-zrxHB6gcO0g)
 
 ## Install
 
