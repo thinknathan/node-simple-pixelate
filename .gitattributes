@@ -5,3 +5,5 @@
 .gitattributes export-ignore
 docs export-ignore
 .vscode export-ignore
+.prettierignore export-ignore
+.prettierrc.json export-ignore
