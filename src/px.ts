@@ -13,11 +13,23 @@ function main() {
 			alias: 'filename',
 			describe: 'Input image filename',
 			type: 'string',
+			coerce: (value) => {
+				if (Array.isArray(value)) {
+					value = value.join('');
+				}
+				return value;
+			},
 		})
 		.option('i', {
 			alias: 'folderPath',
 			describe: 'Input folder',
 			type: 'string',
+			coerce: (value) => {
+				if (Array.isArray(value)) {
+					value = value.join('');
+				}
+				return value;
+			},
 		})
 		.option('s', {
 			alias: 'scale',
