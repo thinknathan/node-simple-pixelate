@@ -81,7 +81,8 @@ function continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAl
     // OPACITY
     (0, applyAlphaThreshold_1.applyAlphaThreshold)(image, alphaThreshold);
     // GRAYSCALE
-    if (grayScale) {
+    // Skip if colorLimit is 2 because of a special case handled later
+    if (grayScale && colorLimit !== 2) {
         image.greyscale();
     }
     // DITHERING
@@ -109,8 +110,8 @@ function continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAl
     }
     else {
         // DYNAMIC COLOUR LIMIT
-        // Special case for 2-colour using black/white threshold
-        if (colorLimit === 2) {
+        // Use black/white threshold
+        if (grayScale && colorLimit === 2) {
             (0, applyBWThreshold_1.applyBWThreshold)(image);
         }
         else {

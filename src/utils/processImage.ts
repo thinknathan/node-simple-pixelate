@@ -169,7 +169,8 @@ function continueProcessing(
 	applyAlphaThreshold(image, alphaThreshold);
 
 	// GRAYSCALE
-	if (grayScale) {
+	// Skip if colorLimit is 2 because of a special case handled later
+	if (grayScale && colorLimit !== 2) {
 		image.greyscale();
 	}
 
@@ -196,8 +197,8 @@ function continueProcessing(
 		applyPalette(image, palette, definedPalettes);
 	} else {
 		// DYNAMIC COLOUR LIMIT
-		// Special case for 2-colour using black/white threshold
-		if (colorLimit === 2) {
+		// Use black/white threshold
+		if (grayScale && colorLimit === 2) {
 			applyBWThreshold(image);
 		} else {
 			definedPalettes[customPaletteName] = applyMedianCut(
