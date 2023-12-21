@@ -165,14 +165,17 @@ function continueProcessing(
 
 	// GRAYSCALE
 	// Skip if colorLimit is 2 because of a special case handled later
-	if (grayScale && colorLimit !== 2) {
+	const doBWThreshold = grayScale && colorLimit === 2;
+	if (grayScale && !doBWThreshold) {
 		image.greyscale();
 	}
 
 	// DITHERING
+	// Wait to apply atkinson if we're sampling our own palette
+	const doAtkinsonLate = !customPalette && !palette && !doBWThreshold;
 	if (ditherAlgo === 'floyd') {
 		image.dither565();
-	} else if (ditherAlgo === 'atkinson') {
+	} else if (ditherAlgo === 'atkinson' && !doAtkinsonLate) {
 		applyAtkinsonDithering(image);
 	} else if (ditherAlgo === 'bayer') {
 		applyBayerDithering(image);
@@ -194,7 +197,7 @@ function continueProcessing(
 	} else {
 		// DYNAMIC COLOUR LIMIT
 		// Use black/white threshold
-		if (grayScale && colorLimit === 2) {
+		if (doBWThreshold) {
 			applyBWThreshold(image);
 		} else {
 			definedPalettes[customPaletteName] = applyMedianCut(
@@ -203,6 +206,10 @@ function continueProcessing(
 				randomColor,
 			);
 			applyPalette(image, customPaletteName, definedPalettes);
+			// Apply atkinson late in the run after applying palette
+			if (ditherAlgo === 'atkinson' && doAtkinsonLate) {
+				applyAtkinsonDithering(image);
+			}
 		}
 	}
 

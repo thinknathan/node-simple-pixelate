@@ -79,14 +79,17 @@ function continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAl
     (0, applyAlphaThreshold_1.applyAlphaThreshold)(image, alphaThreshold);
     // GRAYSCALE
     // Skip if colorLimit is 2 because of a special case handled later
-    if (grayScale && colorLimit !== 2) {
+    const doBWThreshold = grayScale && colorLimit === 2;
+    if (grayScale && !doBWThreshold) {
         image.greyscale();
     }
     // DITHERING
+    // Wait to apply atkinson if we're sampling our own palette
+    const doAtkinsonLate = !customPalette && !palette && !doBWThreshold;
     if (ditherAlgo === 'floyd') {
         image.dither565();
     }
-    else if (ditherAlgo === 'atkinson') {
+    else if (ditherAlgo === 'atkinson' && !doAtkinsonLate) {
         (0, applyAtkinsonDithering_1.applyAtkinsonDithering)(image);
     }
     else if (ditherAlgo === 'bayer') {
@@ -109,12 +112,16 @@ function continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAl
     else {
         // DYNAMIC COLOUR LIMIT
         // Use black/white threshold
-        if (grayScale && colorLimit === 2) {
+        if (doBWThreshold) {
             (0, applyBWThreshold_1.applyBWThreshold)(image);
         }
         else {
             definedPalettes_1.definedPalettes[customPaletteName] = (0, applyMedianCut_1.applyMedianCut)(image, colorLimit, randomColor);
             (0, applyPalette_1.applyPalette)(image, customPaletteName, definedPalettes_1.definedPalettes);
+            // Apply atkinson late in the run after applying palette
+            if (ditherAlgo === 'atkinson' && doAtkinsonLate) {
+                (0, applyAtkinsonDithering_1.applyAtkinsonDithering)(image);
+            }
         }
     }
     if (!(width || height) && afterScale !== 1) {
