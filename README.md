@@ -9,7 +9,7 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
   - <img src="docs/melody.jpg" alt="Cartoon face on box in front of full coffee cup"> <img src="docs/melody-d_none-c_16.png" alt="Cartoon face in limited 16-colour palette">
   - [Photo source](https://unsplash.com/photos/a-cup-of-coffee-sitting-on-top-of-a-white-table-McEh5jAOD3w)
 
-- `--colorLimit 2 --ditherAlgo atkinson --contrast -0.09`
+- `--colorLimit 2 --ditherAlgo atkinson --contrast -0.09 --grayScale true`
 
   - <img src="docs/sharon.jpg" alt="Shirtless man on dark background"> <img src="docs/sharon-d_atkinson-c_2.png" alt="Shirtless man in dithered black and white style">
   - [Photo source](https://unsplash.com/photos/grayscale-photo-of-topless-man-JiSjwGZ-1nA)
