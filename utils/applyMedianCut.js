@@ -39,7 +39,7 @@ function applyMedianCut(image, colorLimit, useRandom) {
         }
         // Choose the axis to split (randomly or deterministically)
         const chosenAxis = random
-            ? ["r", "g", "b"][Math.floor(Math.random() * 3)]
+            ? ['r', 'g', 'b'][Math.floor(Math.random() * 3)]
             : determineAxis(pixelArray);
         // Sort the channel values for the chosen axis
         const sortedChannel = pixelArray

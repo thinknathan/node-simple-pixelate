@@ -13,8 +13,8 @@ const applyBWThreshold_1 = require("./applyBWThreshold");
 const applyLowPassFilter_1 = require("./applyLowPassFilter");
 const applyPalette_1 = require("./applyPalette");
 const applyMedianCut_1 = require("./applyMedianCut");
-const outputFolder = "output";
-const customPaletteName = "CUSTOM";
+const outputFolder = 'output';
+const customPaletteName = 'CUSTOM';
 const definedPalettes = definedPalettes_1.definedPalettesImport;
 /**
  * Processes the given image with various image manipulation options.
@@ -42,7 +42,7 @@ function processImage(options, skipExtCheck) {
         return;
     }
     // Check for supported image formats if skipExtCheck is false
-    const supportedFormats = [".png", ".gif", ".jpg", ".jpeg"];
+    const supportedFormats = ['.png', '.gif', '.jpg', '.jpeg'];
     let foundImage = false;
     // Attempt to read the image with different extensions
     supportedFormats.forEach((ext) => {
@@ -85,13 +85,13 @@ function continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAl
         image.greyscale();
     }
     // DITHERING
-    if (ditherAlgo === "floyd") {
+    if (ditherAlgo === 'floyd') {
         image.dither565();
     }
-    else if (ditherAlgo === "atkinson") {
+    else if (ditherAlgo === 'atkinson') {
         (0, applyAtkinsonDithering_1.applyAtkinsonDithering)(image);
     }
-    else if (ditherAlgo === "bayer") {
+    else if (ditherAlgo === 'bayer') {
         (0, applyBayerDithering_1.applyBayerDithering)(image);
     }
     // PIXELATE
