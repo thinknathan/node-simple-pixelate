@@ -14,7 +14,7 @@ export function applyAlphaThreshold(image: Jimp, alphaThreshold: number): void {
 		0,
 		image.bitmap.width,
 		image.bitmap.height,
-		function (x, y, idx) {
+		function (_x, _y, idx) {
 			const alpha = this.bitmap.data[idx + 3];
 			this.bitmap.data[idx + 3] = alpha > threshold ? 255 : 0;
 		},

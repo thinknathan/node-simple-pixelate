@@ -1,7 +1,6 @@
 import * as Jimp from 'jimp';
 
-import { definedPalettesImport } from './definedPalettes';
-type TDefinedPalettes = typeof definedPalettesImport & Record<string, Color[]>;
+import { type definedPalettes } from './definedPalettes';
 
 /**
  * Applies a custom color palette to the given Jimp image.
@@ -9,14 +8,14 @@ type TDefinedPalettes = typeof definedPalettesImport & Record<string, Color[]>;
 export function applyPalette(
 	image: Jimp,
 	palette: string,
-	definedPalettes: TDefinedPalettes,
+	definedPalettesV: typeof definedPalettes,
 ): void {
-	if (!definedPalettes[palette]) {
+	if (!definedPalettesV[palette]) {
 		console.error(`${palette} not found in predefined palettes.`);
 		return;
 	}
 
-	const chosenPalette = definedPalettes[palette];
+	const chosenPalette = definedPalettesV[palette];
 
 	// Apply the custom palette
 	image.scan(
@@ -24,7 +23,7 @@ export function applyPalette(
 		0,
 		image.bitmap.width,
 		image.bitmap.height,
-		function (x, y, idx) {
+		function (x, y, _idx) {
 			const pixelColor = Jimp.intToRGBA(this.getPixelColor(x, y));
 			const closestColor = findClosestColor(pixelColor, chosenPalette);
 
@@ -44,7 +43,7 @@ export function applyPalette(
 }
 
 // Function to find the closest color in the palette
-function findClosestColor(targetColor: Color, palette: Color[]): Color {
+function findClosestColor(targetColor: Color, palette: Palette): Color {
 	return palette.reduce((closest, current) => {
 		const distanceTarget =
 			Math.abs(targetColor.r - closest.r) +

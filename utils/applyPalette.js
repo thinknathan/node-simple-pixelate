@@ -5,14 +5,14 @@ const Jimp = require("jimp");
 /**
  * Applies a custom color palette to the given Jimp image.
  */
-function applyPalette(image, palette, definedPalettes) {
-    if (!definedPalettes[palette]) {
+function applyPalette(image, palette, definedPalettesV) {
+    if (!definedPalettesV[palette]) {
         console.error(`${palette} not found in predefined palettes.`);
         return;
     }
-    const chosenPalette = definedPalettes[palette];
+    const chosenPalette = definedPalettesV[palette];
     // Apply the custom palette
-    image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
+    image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, _idx) {
         const pixelColor = Jimp.intToRGBA(this.getPixelColor(x, y));
         const closestColor = findClosestColor(pixelColor, chosenPalette);
         // Set the pixel to the closest color in the palette

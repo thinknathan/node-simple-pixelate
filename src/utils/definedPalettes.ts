@@ -436,7 +436,7 @@ const ATARI_LYNX = [
 	{ r: 255, g: 255, b: 0 }, // Yellow
 ] as const;
 
-export const definedPalettesImport = {
+const definedPalettes: Record<string, Palette> = {
 	APPLE_II_HI,
 	GAMEBOY_ORIGINAL,
 	GAMEBOY_COMBO_UP,
@@ -484,7 +484,9 @@ export const definedPalettesImport = {
 	ATARI_5200,
 	ATARI_7800,
 	ATARI_LYNX,
-} as const;
+};
+
+export { definedPalettes };
 
 // MIT License
 

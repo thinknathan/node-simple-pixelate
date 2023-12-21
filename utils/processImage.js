@@ -13,9 +13,6 @@ const applyBWThreshold_1 = require("./applyBWThreshold");
 const applyLowPassFilter_1 = require("./applyLowPassFilter");
 const applyPalette_1 = require("./applyPalette");
 const applyMedianCut_1 = require("./applyMedianCut");
-const outputFolder = 'output';
-const customPaletteName = 'CUSTOM';
-const definedPalettes = definedPalettes_1.definedPalettesImport;
 /**
  * Processes the given image with various image manipulation options.
  *
@@ -99,14 +96,15 @@ function continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAl
     if (pixelSize > 0) {
         image.pixelate(pixelSize);
     }
+    const customPaletteName = 'CUSTOM';
     if (customPalette) {
         // USER-DEFINED PALETTE
-        definedPalettes[customPaletteName] = customPalette;
-        (0, applyPalette_1.applyPalette)(image, customPaletteName, definedPalettes);
+        definedPalettes_1.definedPalettes[customPaletteName] = customPalette;
+        (0, applyPalette_1.applyPalette)(image, customPaletteName, definedPalettes_1.definedPalettes);
     }
     else if (palette) {
         // PREDEFINED PALETTE
-        (0, applyPalette_1.applyPalette)(image, palette, definedPalettes);
+        (0, applyPalette_1.applyPalette)(image, palette, definedPalettes_1.definedPalettes);
     }
     else {
         // DYNAMIC COLOUR LIMIT
@@ -115,13 +113,14 @@ function continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAl
             (0, applyBWThreshold_1.applyBWThreshold)(image);
         }
         else {
-            definedPalettes[customPaletteName] = (0, applyMedianCut_1.applyMedianCut)(image, colorLimit, randomColor);
-            (0, applyPalette_1.applyPalette)(image, customPaletteName, definedPalettes);
+            definedPalettes_1.definedPalettes[customPaletteName] = (0, applyMedianCut_1.applyMedianCut)(image, colorLimit, randomColor);
+            (0, applyPalette_1.applyPalette)(image, customPaletteName, definedPalettes_1.definedPalettes);
         }
     }
     if (!(width || height) && afterScale !== 1) {
         image.scale(afterScale, Jimp.RESIZE_NEAREST_NEIGHBOR);
     }
+    const outputFolder = 'output';
     // Create a folder for output if it doesn't exist
     if (!fs.existsSync(outputFolder)) {
         fs.mkdirSync(outputFolder);

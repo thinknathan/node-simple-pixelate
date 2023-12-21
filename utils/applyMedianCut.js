@@ -11,7 +11,7 @@ const Jimp = require("jimp");
 function applyMedianCut(image, colorLimit, useRandom) {
     const pixels = [];
     // Collect all pixels from the image
-    image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
+    image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, _idx) {
         const pixelColor = Jimp.intToRGBA(this.getPixelColor(x, y));
         pixels.push({
             r: pixelColor.r,

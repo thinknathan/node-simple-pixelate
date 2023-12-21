@@ -6,6 +6,8 @@ declare type Color = {
 
 declare type ColorKey = 'r' | 'g' | 'b';
 
+declare type Palette = Color[] | Readonly<Color[]>;
+
 declare type Options = {
 	filename: string | undefined;
 	folderPath: string | undefined;

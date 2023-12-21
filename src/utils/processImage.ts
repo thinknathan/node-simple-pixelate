@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { workerData, isMainThread } from 'worker_threads';
 
-import { definedPalettesImport } from './definedPalettes';
+import { definedPalettes } from './definedPalettes';
 import { applyAlphaThreshold } from './applyAlphaThreshold';
 import { applyAtkinsonDithering } from './applyAtkinsonDithering';
 import { applyBayerDithering } from './applyBayerDithering';
@@ -11,11 +11,6 @@ import { applyBWThreshold } from './applyBWThreshold';
 import { applyLowPassFilter } from './applyLowPassFilter';
 import { applyPalette } from './applyPalette';
 import { applyMedianCut } from './applyMedianCut';
-
-const outputFolder = 'output';
-const customPaletteName = 'CUSTOM';
-const definedPalettes = definedPalettesImport as typeof definedPalettesImport &
-	Record<string, Color[]>;
 
 /**
  * Processes the given image with various image manipulation options.
@@ -188,6 +183,7 @@ function continueProcessing(
 		image.pixelate(pixelSize);
 	}
 
+	const customPaletteName = 'CUSTOM';
 	if (customPalette) {
 		// USER-DEFINED PALETTE
 		definedPalettes[customPaletteName] = customPalette;
@@ -214,6 +210,7 @@ function continueProcessing(
 		image.scale(afterScale, Jimp.RESIZE_NEAREST_NEIGHBOR);
 	}
 
+	const outputFolder = 'output';
 	// Create a folder for output if it doesn't exist
 	if (!fs.existsSync(outputFolder)) {
 		fs.mkdirSync(outputFolder);

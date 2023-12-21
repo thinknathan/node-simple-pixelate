@@ -19,7 +19,7 @@ export function applyMedianCut(
 		0,
 		image.bitmap.width,
 		image.bitmap.height,
-		function (x, y, idx) {
+		function (x, y, _idx) {
 			const pixelColor = Jimp.intToRGBA(this.getPixelColor(x, y));
 			pixels.push({
 				r: pixelColor.r,
