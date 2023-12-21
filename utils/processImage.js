@@ -53,6 +53,9 @@ function processImage(options, skipExtCheck) {
             });
         }
     });
+    if (foundImage === false) {
+        throw new Error(`Could not find ${filename}`);
+    }
 }
 exports.processImage = processImage;
 function continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, inputFilename) {

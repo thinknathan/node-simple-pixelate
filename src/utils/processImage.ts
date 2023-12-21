@@ -112,6 +112,10 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
 			});
 		}
 	});
+
+	if (foundImage === false) {
+		throw new Error(`Could not find ${filename}`);
+	}
 }
 
 function continueProcessing(
