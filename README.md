@@ -4,7 +4,7 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
 
 ## Examples
 
-- `--colorLimit 16`
+- `--colorLimit 16 --scale 0.5 --afterScale 2`
 
   - <img src="docs/melody.jpg" alt="Cartoon face on box in front of full coffee cup"> <img src="docs/melody-d_none-c_16.png" alt="Cartoon face in limited 16-colour palette">
   - [Photo source](https://unsplash.com/photos/a-cup-of-coffee-sitting-on-top-of-a-white-table-McEh5jAOD3w)
