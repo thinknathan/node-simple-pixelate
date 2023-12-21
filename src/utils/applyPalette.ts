@@ -11,7 +11,7 @@ export function applyPalette(
 	definedPalettesV: typeof definedPalettes,
 ): void {
 	if (!definedPalettesV[palette]) {
-		console.error(`${palette} not found in predefined palettes.`);
+		console.error(`Error: ${palette} not found in predefined palettes.`);
 		return;
 	}
 

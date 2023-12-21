@@ -12,6 +12,12 @@ import { applyLowPassFilter } from './applyLowPassFilter';
 import { applyPalette } from './applyPalette';
 import { applyMedianCut } from './applyMedianCut';
 
+function errorCallback(err: unknown) {
+	if (err) {
+		console.error(err);
+	}
+}
+
 /**
  * Processes the given image with various image manipulation options.
  *
@@ -39,83 +45,88 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
 		height,
 	} = options;
 
-	if (filename) {
-		Jimp.read(filename, (err, image) => {
-			if (err && skipExtCheck) {
-				console.error(err);
-			} else {
-				// Continue if image is successfully read
-				if (image) {
-					continueProcessing(
-						image,
-						scale,
-						afterScale,
-						cubic,
-						pixelSize,
-						ditherAlgo,
-						alphaThreshold,
-						colorLimit,
-						palette,
-						customPalette,
-						randomColor,
-						lowPass,
-						normalize,
-						grayScale,
-						contrast,
-						width,
-						height,
-						filename,
-					);
-					return;
-				}
+	Jimp.read(filename!)
+		.then((image) => {
+			// Continue if image is successfully read
+			if (image) {
+				skipExtCheck = true;
+				continueProcessing(
+					image,
+					scale,
+					afterScale,
+					cubic,
+					pixelSize,
+					ditherAlgo,
+					alphaThreshold,
+					colorLimit,
+					palette,
+					customPalette,
+					randomColor,
+					lowPass,
+					normalize,
+					grayScale,
+					contrast,
+					width,
+					height,
+					filename!,
+				);
 			}
-		});
-	}
+		})
+		.catch((err) => {
+			if (skipExtCheck) {
+				console.error(err);
+			}
+		})
+		.finally(() => {
+			if (skipExtCheck) {
+				return;
+			}
+			// Check for supported image formats if skipExtCheck is false
+			const supportedFormats = ['.png', '.gif', '.jpg', '.jpeg'];
+			let foundImage = false;
 
-	if (skipExtCheck) {
-		return;
-	}
-
-	// Check for supported image formats if skipExtCheck is false
-	const supportedFormats = ['.png', '.gif', '.jpg', '.jpeg'];
-	let foundImage = false;
-
-	// Attempt to read the image with different extensions
-	supportedFormats.forEach((ext) => {
-		const fullFilename = filename + ext;
-
-		if (!foundImage) {
-			Jimp.read(fullFilename, (err, image) => {
-				if (!foundImage && !err) {
-					foundImage = true;
-					continueProcessing(
-						image,
-						scale,
-						afterScale,
-						cubic,
-						pixelSize,
-						ditherAlgo,
-						alphaThreshold,
-						colorLimit,
-						palette,
-						customPalette,
-						randomColor,
-						lowPass,
-						normalize,
-						grayScale,
-						contrast,
-						width,
-						height,
-						fullFilename,
-					);
-				}
+			// Attempt to read the image with different extensions
+			const promises = supportedFormats.map((ext) => {
+				const fullFilename = filename + ext;
+				return (
+					Jimp.read(fullFilename)
+						.then((image) => {
+							foundImage = true;
+							continueProcessing(
+								image,
+								scale,
+								afterScale,
+								cubic,
+								pixelSize,
+								ditherAlgo,
+								alphaThreshold,
+								colorLimit,
+								palette,
+								customPalette,
+								randomColor,
+								lowPass,
+								normalize,
+								grayScale,
+								contrast,
+								width,
+								height,
+								fullFilename,
+							);
+						})
+						// Silence errors since we'll handle them later
+						.catch(() => {})
+				);
 			});
-		}
-	});
 
-	if (foundImage === false) {
-		throw new Error(`Could not find ${filename}`);
-	}
+			// Wait for all promises to be resolved
+			Promise.all(promises)
+				.then(() => {
+					if (!foundImage) {
+						console.error(`Error: Could not find ${filename}`);
+					}
+				})
+				.catch(errorCallback);
+		});
 }
 
 function continueProcessing(
@@ -138,6 +149,7 @@ function continueProcessing(
 	height: number | undefined,
 	inputFilename: string,
 ): void {
+	console.time('Done in');
 	// RESIZE
 	if (width || height) {
 		image.resize(
@@ -251,8 +263,9 @@ function continueProcessing(
 	}
 	outputFilename = `${outputFilename}.png`;
 
-	image.write(outputFilename);
+	image.write(outputFilename, errorCallback);
 	console.log(`Image saved: ${outputFilename}`);
+	console.timeEnd('Done in');
 }
 
 // If used as a worker thread, get file name from message

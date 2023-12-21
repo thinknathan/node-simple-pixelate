@@ -254,8 +254,8 @@ function main() {
 		numCores = Math.min(numCores, 16); // Max 16
 		(0, processPath_1.processPath)(options.folderPath, options, numCores);
 	} else {
-		console.log(
-			'Requires either `filename` or `folderPath`. Run `px --help` for help.',
+		console.error(
+			'Error: Requires either `filename` or `folderPath`. Run `px --help` for help.',
 		);
 	}
 }

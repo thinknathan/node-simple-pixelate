@@ -7,7 +7,7 @@ const Jimp = require("jimp");
  */
 function applyPalette(image, palette, definedPalettesV) {
     if (!definedPalettesV[palette]) {
-        console.error(`${palette} not found in predefined palettes.`);
+        console.error(`Error: ${palette} not found in predefined palettes.`);
         return;
     }
     const chosenPalette = definedPalettesV[palette];
