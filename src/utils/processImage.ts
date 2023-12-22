@@ -25,51 +25,13 @@ function errorCallback(err: unknown) {
  * @param skipExtCheck - (Optional) Skips extension check if set to true.
  */
 export function processImage(options: Options, skipExtCheck?: boolean): void {
-	const {
-		filename,
-		scale,
-		afterScale,
-		cubic,
-		pixelSize,
-		ditherAlgo,
-		alphaThreshold,
-		colorLimit,
-		palette,
-		customPalette,
-		randomColor,
-		lowPass,
-		normalize,
-		grayScale,
-		contrast,
-		width,
-		height,
-	} = options;
-
+	const { filename } = options;
 	Jimp.read(filename!)
 		.then((image) => {
 			// Continue if image is successfully read
 			if (image) {
 				skipExtCheck = true;
-				continueProcessing(
-					image,
-					scale,
-					afterScale,
-					cubic,
-					pixelSize,
-					ditherAlgo,
-					alphaThreshold,
-					colorLimit,
-					palette,
-					customPalette,
-					randomColor,
-					lowPass,
-					normalize,
-					grayScale,
-					contrast,
-					width,
-					height,
-					filename!,
-				);
+				continueProcessing(image, options);
 			}
 		})
 		.catch((err) => {
@@ -92,26 +54,7 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
 					Jimp.read(fullFilename)
 						.then((image) => {
 							foundImage = true;
-							continueProcessing(
-								image,
-								scale,
-								afterScale,
-								cubic,
-								pixelSize,
-								ditherAlgo,
-								alphaThreshold,
-								colorLimit,
-								palette,
-								customPalette,
-								randomColor,
-								lowPass,
-								normalize,
-								grayScale,
-								contrast,
-								width,
-								height,
-								fullFilename,
-							);
+							continueProcessing(image, options);
 						})
 						// Silence errors since we'll handle them later
 						.catch(() => {})
@@ -129,27 +72,29 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
 		});
 }
 
-function continueProcessing(
-	image: Jimp,
-	scale: number,
-	afterScale: number,
-	cubic: boolean,
-	pixelSize: number,
-	ditherAlgo: string,
-	alphaThreshold: number,
-	colorLimit: number,
-	palette: string | undefined,
-	customPalette: Color[] | undefined,
-	randomColor: boolean,
-	lowPass: boolean,
-	normalize: boolean,
-	grayScale: boolean,
-	contrast: number,
-	width: number | undefined,
-	height: number | undefined,
-	inputFilename: string,
-): void {
+function continueProcessing(image: Jimp, options: Options): void {
 	console.time('Done in');
+
+	const {
+		filename,
+		scale,
+		afterScale,
+		cubic,
+		pixelSize,
+		ditherAlgo,
+		alphaThreshold,
+		colorLimit,
+		palette,
+		customPalette,
+		randomColor,
+		lowPass,
+		normalize,
+		grayScale,
+		contrast,
+		width,
+		height,
+	} = options;
+
 	// RESIZE
 	if (width || height) {
 		image.resize(
@@ -240,10 +185,7 @@ function continueProcessing(
 	}
 
 	// Incorporate the input filename into the output filename
-	const baseFilename = path.basename(
-		inputFilename,
-		path.extname(inputFilename),
-	);
+	const baseFilename = path.basename(filename!, path.extname(filename!));
 	let outputFilename = `${outputFolder}/${baseFilename}-d_${ditherAlgo}`;
 	if (customPalette) {
 		outputFilename = `${outputFilename}-o_custom`;

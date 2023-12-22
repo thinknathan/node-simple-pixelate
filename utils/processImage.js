@@ -25,13 +25,13 @@ function errorCallback(err) {
  * @param skipExtCheck - (Optional) Skips extension check if set to true.
  */
 function processImage(options, skipExtCheck) {
-    const { filename, scale, afterScale, cubic, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, } = options;
+    const { filename } = options;
     Jimp.read(filename)
         .then((image) => {
         // Continue if image is successfully read
         if (image) {
             skipExtCheck = true;
-            continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, filename);
+            continueProcessing(image, options);
         }
     })
         .catch((err) => {
@@ -52,7 +52,7 @@ function processImage(options, skipExtCheck) {
             return (Jimp.read(fullFilename)
                 .then((image) => {
                 foundImage = true;
-                continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, fullFilename);
+                continueProcessing(image, options);
             })
                 // Silence errors since we'll handle them later
                 .catch(() => { }));
@@ -68,8 +68,9 @@ function processImage(options, skipExtCheck) {
     });
 }
 exports.processImage = processImage;
-function continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, inputFilename) {
+function continueProcessing(image, options) {
     console.time('Done in');
+    const { filename, scale, afterScale, cubic, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, } = options;
     // RESIZE
     if (width || height) {
         image.resize(width ? width : Jimp.AUTO, height ? height : Jimp.AUTO, cubic ? Jimp.RESIZE_BICUBIC : Jimp.RESIZE_BILINEAR);
@@ -147,7 +148,7 @@ function continueProcessing(image, scale, afterScale, cubic, pixelSize, ditherAl
         fs.mkdirSync(outputFolder);
     }
     // Incorporate the input filename into the output filename
-    const baseFilename = path.basename(inputFilename, path.extname(inputFilename));
+    const baseFilename = path.basename(filename, path.extname(filename));
     let outputFilename = `${outputFolder}/${baseFilename}-d_${ditherAlgo}`;
     if (customPalette) {
         outputFilename = `${outputFilename}-o_custom`;
