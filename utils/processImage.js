@@ -25,6 +25,7 @@ function errorCallback(err) {
  * @param skipExtCheck - (Optional) Skips extension check if set to true.
  */
 function processImage(options, skipExtCheck) {
+    console.time('Done in');
     const { filename } = options;
     Jimp.read(filename)
         .then((image) => {
@@ -69,7 +70,6 @@ function processImage(options, skipExtCheck) {
 }
 exports.processImage = processImage;
 function continueProcessing(image, options) {
-    console.time('Done in');
     const { filename, scale, afterScale, cubic, pixelSize, ditherAlgo, alphaThreshold, colorLimit, palette, customPalette, randomColor, lowPass, normalize, grayScale, contrast, width, height, } = options;
     // RESIZE
     if (width || height) {

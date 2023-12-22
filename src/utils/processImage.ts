@@ -25,6 +25,7 @@ function errorCallback(err: unknown) {
  * @param skipExtCheck - (Optional) Skips extension check if set to true.
  */
 export function processImage(options: Options, skipExtCheck?: boolean): void {
+	console.time('Done in');
 	const { filename } = options;
 	Jimp.read(filename!)
 		.then((image) => {
@@ -73,8 +74,6 @@ export function processImage(options: Options, skipExtCheck?: boolean): void {
 }
 
 function continueProcessing(image: Jimp, options: Options): void {
-	console.time('Done in');
-
 	const {
 		filename,
 		scale,
