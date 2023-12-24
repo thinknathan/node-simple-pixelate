@@ -38,7 +38,11 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
   - `node px.cjs -f myImage.png`
 
 - Get all available options:
+
   - `node px.cjs --help`
+
+- Valid input formats: `jpeg`, `png`, `bmp`, `tiff`, `gif`
+- Output format is `png`
 
 ### Options
 
