@@ -5,27 +5,27 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.definedPalettes = void 0;
 const APPLE_II_HI = [
-    { r: 0, g: 0, b: 0 },
-    { r: 255, g: 255, b: 255 },
-    { r: 136, g: 0, b: 0 },
-    { r: 170, g: 255, b: 238 },
-    { r: 204, g: 68, b: 204 },
-    { r: 0, g: 204, b: 85 },
-    { r: 0, g: 0, b: 170 },
-    { r: 238, g: 238, b: 119 },
-    { r: 221, g: 136, b: 85 },
-    { r: 102, g: 68, b: 0 },
-    { r: 255, g: 119, b: 119 },
-    { r: 51, g: 51, b: 51 },
-    { r: 119, g: 119, b: 119 },
-    { r: 170, g: 255, b: 102 },
-    { r: 0, g: 136, b: 255 },
+    { r: 0, g: 0, b: 0 }, // Black
+    { r: 255, g: 255, b: 255 }, // White
+    { r: 136, g: 0, b: 0 }, // Red
+    { r: 170, g: 255, b: 238 }, // Cyan
+    { r: 204, g: 68, b: 204 }, // Purple
+    { r: 0, g: 204, b: 85 }, // Green
+    { r: 0, g: 0, b: 170 }, // Blue
+    { r: 238, g: 238, b: 119 }, // Yellow
+    { r: 221, g: 136, b: 85 }, // Orange
+    { r: 102, g: 68, b: 0 }, // Brown
+    { r: 255, g: 119, b: 119 }, // Light Red
+    { r: 51, g: 51, b: 51 }, // Dark Gray
+    { r: 119, g: 119, b: 119 }, // Gray
+    { r: 170, g: 255, b: 102 }, // Light Green
+    { r: 0, g: 136, b: 255 }, // Light Blue
     { r: 187, g: 187, b: 187 }, // Light Gray
 ];
 const GAMEBOY_ORIGINAL = [
-    { r: 155, g: 188, b: 15 },
-    { r: 139, g: 172, b: 15 },
-    { r: 48, g: 98, b: 48 },
+    { r: 155, g: 188, b: 15 }, // Light Green
+    { r: 139, g: 172, b: 15 }, // Dark Green
+    { r: 48, g: 98, b: 48 }, // Dark Gray
     { r: 15, g: 56, b: 15 }, // Black
 ];
 const GAMEBOY_COMBO_UP = [
@@ -330,67 +330,67 @@ const MONO_PHOSPHOR_APPLEC = [
 ];
 const APPLE_II_MONOC = MONO_PHOSPHOR_APPLEC;
 const MICROSOFT_WINDOWS_PAINT = [
-    { r: 255, g: 255, b: 255 },
-    { r: 192, g: 192, b: 192 },
-    { r: 128, g: 128, b: 128 },
-    { r: 0, g: 0, b: 0 },
-    { r: 128, g: 0, b: 0 },
-    { r: 255, g: 0, b: 0 },
-    { r: 128, g: 128, b: 0 },
-    { r: 255, g: 255, b: 0 },
-    { r: 0, g: 128, b: 0 },
-    { r: 0, g: 255, b: 0 },
-    { r: 0, g: 128, b: 128 },
-    { r: 0, g: 255, b: 255 },
-    { r: 0, g: 0, b: 128 },
-    { r: 0, g: 0, b: 255 },
-    { r: 128, g: 0, b: 128 },
+    { r: 255, g: 255, b: 255 }, // White
+    { r: 192, g: 192, b: 192 }, // Light Gray
+    { r: 128, g: 128, b: 128 }, // Gray
+    { r: 0, g: 0, b: 0 }, // Black
+    { r: 128, g: 0, b: 0 }, // Maroon
+    { r: 255, g: 0, b: 0 }, // Red
+    { r: 128, g: 128, b: 0 }, // Olive
+    { r: 255, g: 255, b: 0 }, // Yellow
+    { r: 0, g: 128, b: 0 }, // Green
+    { r: 0, g: 255, b: 0 }, // Lime
+    { r: 0, g: 128, b: 128 }, // Teal
+    { r: 0, g: 255, b: 255 }, // Aqua
+    { r: 0, g: 0, b: 128 }, // Navy
+    { r: 0, g: 0, b: 255 }, // Blue
+    { r: 128, g: 0, b: 128 }, // Purple
     { r: 255, g: 0, b: 255 }, // Fuchsia
 ];
 const AMSTRAD_CPC = [
-    { r: 0, g: 0, b: 0 },
-    { r: 0, g: 0, b: 255 },
-    { r: 255, g: 0, b: 0 },
-    { r: 255, g: 0, b: 255 },
-    { r: 0, g: 255, b: 0 },
-    { r: 0, g: 255, b: 255 },
-    { r: 255, g: 255, b: 0 },
+    { r: 0, g: 0, b: 0 }, // Black
+    { r: 0, g: 0, b: 255 }, // Blue
+    { r: 255, g: 0, b: 0 }, // Red
+    { r: 255, g: 0, b: 255 }, // Magenta
+    { r: 0, g: 255, b: 0 }, // Green
+    { r: 0, g: 255, b: 255 }, // Cyan
+    { r: 255, g: 255, b: 0 }, // Yellow
     { r: 255, g: 255, b: 255 }, // White
 ];
 const ATARI_2600 = [
-    { r: 0, g: 0, b: 0 },
-    { r: 255, g: 255, b: 255 },
-    { r: 132, g: 132, b: 132 },
+    { r: 0, g: 0, b: 0 }, // Black
+    { r: 255, g: 255, b: 255 }, // White
+    { r: 132, g: 132, b: 132 }, // Light Gray
     { r: 76, g: 76, b: 76 }, // Dark Gray
 ];
 const ATARI_5200 = [
-    { r: 0, g: 0, b: 0 },
-    { r: 255, g: 255, b: 255 },
-    { r: 132, g: 132, b: 132 },
-    { r: 76, g: 76, b: 76 },
-    { r: 255, g: 0, b: 0 },
-    { r: 0, g: 255, b: 0 },
-    { r: 0, g: 0, b: 255 },
+    { r: 0, g: 0, b: 0 }, // Black
+    { r: 255, g: 255, b: 255 }, // White
+    { r: 132, g: 132, b: 132 }, // Light Gray
+    { r: 76, g: 76, b: 76 }, // Dark Gray
+    { r: 255, g: 0, b: 0 }, // Red
+    { r: 0, g: 255, b: 0 }, // Green
+    { r: 0, g: 0, b: 255 }, // Blue
     { r: 255, g: 255, b: 0 }, // Yellow
 ];
 const ATARI_7800 = [
-    { r: 0, g: 0, b: 0 },
-    { r: 255, g: 255, b: 255 },
-    { r: 132, g: 132, b: 132 },
-    { r: 76, g: 76, b: 76 },
-    { r: 255, g: 0, b: 0 },
-    { r: 0, g: 255, b: 0 },
-    { r: 0, g: 0, b: 255 },
+    { r: 0, g: 0, b: 0 }, // Black
+    { r: 255, g: 255, b: 255 }, // White
+    { r: 132, g: 132, b: 132 }, // Light Gray
+    { r: 76, g: 76, b: 76 }, // Dark Gray
+    { r: 255, g: 0, b: 0 }, // Red
+    { r: 0, g: 255, b: 0 }, // Green
+    { r: 0, g: 0, b: 255 }, // Blue
     { r: 255, g: 255, b: 0 }, // Yellow
 ];
 const ATARI_LYNX = [
-    { r: 0, g: 0, b: 0 },
-    { r: 255, g: 255, b: 255 },
-    { r: 132, g: 132, b: 132 },
-    { r: 76, g: 76, b: 76 },
-    { r: 255, g: 0, b: 0 },
-    { r: 0, g: 255, b: 0 },
-    { r: 0, g: 0, b: 255 },
+    { r: 0, g: 0, b: 0 }, // Black
+    { r: 255, g: 255, b: 255 }, // White
+    { r: 132, g: 132, b: 132 }, // Light Gray
+    { r: 76, g: 76, b: 76 }, // Dark Gray
+    { r: 255, g: 0, b: 0 }, // Red
+    { r: 0, g: 255, b: 0 }, // Green
+    { r: 0, g: 0, b: 255 }, // Blue
     { r: 255, g: 255, b: 0 }, // Yellow
 ];
 const definedPalettes = {
