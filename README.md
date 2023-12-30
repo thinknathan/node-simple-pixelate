@@ -1,4 +1,4 @@
-# node-simple-pixelate
+# Simple Pixelate
 
 Command-line utility that pixelizes images to create pixel art. Inspired by [pyxelate](https://github.com/sedthh/pyxelate), but for Node.
 
@@ -31,15 +31,18 @@ Command-line utility that pixelizes images to create pixel art. Inspired by [pyx
    or
    `yarn`
 
+4. Install for command-line usage
+   `npm link`
+
 ## Usage
 
 - Process a file:
 
-  - `node px.cjs -f myImage.png`
+  - `px -f myImage.png`
 
 - Get all available options:
 
-  - `node px.cjs --help`
+  - `px --help`
 
 - Valid input formats: `jpeg`, `png`, `bmp`, `tiff`, `gif`
 - Output format is `png`
