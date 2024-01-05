@@ -1,3 +1,5 @@
+<img src="docs/banner.png" alt="Simple Pixelate">
+
 # Simple Pixelate
 
 Command-line utility that pixelizes images to create pixel art. Inspired by [pyxelate](https://github.com/sedthh/pyxelate), but for Node.
