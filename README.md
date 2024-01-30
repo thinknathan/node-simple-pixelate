@@ -2,6 +2,8 @@
 
 # Simple Pixelate
 
+[![CI](https://github.com/thinknathan/node-simple-pixelate/actions/workflows/ci.yml/badge.svg)](https://github.com/thinknathan/node-simple-pixelate/actions/workflows/ci.yml)
+
 Command-line utility that pixelizes images to create pixel art. Inspired by [pyxelate](https://github.com/sedthh/pyxelate), but for Node.
 
 ## Examples
