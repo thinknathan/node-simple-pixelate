@@ -6,9 +6,11 @@ import * as os from 'os';
 import { processImage } from './utils/processImage';
 import { processPath } from './utils/processPath';
 
-function main() {
+async function main() {
+	console.time('Done in');
+
 	// Parse command line arguments
-	const options = yargs
+	const options = (await yargs(process.argv.slice(2))
 		.option('f', {
 			alias: 'filename',
 			describe: 'Input image filename',
@@ -252,7 +254,8 @@ function main() {
 				}
 				return Math.round(value);
 			},
-		}).argv as unknown as Options;
+		})
+		.parse()) as unknown as Options;
 
 	if (options.filename) {
 		// Process a single image
@@ -266,13 +269,14 @@ function main() {
 			console.error(err);
 		}
 		numCores = Math.max(numCores - 1, 1); // Min 1
-		numCores = Math.min(numCores, 16); // Max 16
-		processPath(options.folderPath, options, numCores);
+		numCores = Math.min(numCores, 32); // Max 32
+		await processPath(options.folderPath, options, numCores);
 	} else {
 		console.error(
 			'Error: Requires either `filename` or `folderPath`. Run `px --help` for help.',
 		);
 	}
+	console.timeEnd('Done in');
 }
 
 main();

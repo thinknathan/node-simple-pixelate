@@ -16,14 +16,16 @@ async function processPath(directoryPath, options, maxWorkers) {
             const filePath = path.join(directoryPath, file);
             // Check if it's a file (not a subdirectory)
             if ((await fs.stat(filePath)).isFile()) {
+                console.log(filePath, options);
                 workerPool.addTask(filePath, options);
             }
         }
-        // Wait for all tasks to complete before exiting
-        workerPool.waitForCompletion();
     }
     catch (err) {
         console.error(`Error reading directory: ${directoryPath}`, err);
     }
+    await workerPool.allComplete();
+    workerPool.exitAll();
+    return true;
 }
 exports.processPath = processPath;

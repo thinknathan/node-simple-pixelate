@@ -25,7 +25,6 @@ function errorCallback(err) {
  * @param skipExtCheck - (Optional) Skips extension check if set to true.
  */
 function processImage(options, skipExtCheck) {
-    console.time('Done in');
     const { filename } = options;
     Jimp.read(filename)
         .then((image) => {
@@ -171,11 +170,14 @@ function continueProcessing(image, options) {
     outputFilename = `${outputFilename}.png`;
     image.write(outputFilename, errorCallback);
     console.log(`Image saved: ${outputFilename}`);
-    console.timeEnd('Done in');
 }
 // If used as a worker thread, get file name from message
 if (!worker_threads_1.isMainThread) {
-    const { filePath, options } = worker_threads_1.workerData;
-    options.filename = filePath;
-    processImage(options, true);
+    const workIsDone = () => worker_threads_1.parentPort?.postMessage('complete');
+    worker_threads_1.parentPort?.on('message', async (message) => {
+        const { filePath, options } = message;
+        options.filename = filePath;
+        processImage(options, true);
+        workIsDone();
+    });
 }
