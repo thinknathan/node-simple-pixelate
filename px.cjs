@@ -6,7 +6,7 @@ const os = require('os');
 const processImage_1 = require('./utils/processImage');
 const processPath_1 = require('./utils/processPath');
 async function main() {
-	console.time('Done in');
+	// console.time('Done in');
 	// Parse command line arguments
 	const options = await yargs(process.argv.slice(2))
 		.option('f', {
@@ -272,6 +272,6 @@ async function main() {
 			'Error: Requires either `filename` or `folderPath`. Run `px --help` for help.',
 		);
 	}
-	console.timeEnd('Done in');
+	// console.timeEnd('Done in');
 }
 main();
