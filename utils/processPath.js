@@ -16,7 +16,6 @@ async function processPath(directoryPath, options, maxWorkers) {
             const filePath = path.join(directoryPath, file);
             // Check if it's a file (not a subdirectory)
             if ((await fs.stat(filePath)).isFile()) {
-                console.log(filePath, options);
                 workerPool.addTask(filePath, options);
             }
         }

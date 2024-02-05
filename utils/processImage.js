@@ -19,6 +19,10 @@ function errorCallback(err) {
     }
 }
 /**
+ * Called on a worker thread to signal current work is complete
+ */
+const workerIsDone = () => worker_threads_1.parentPort?.postMessage('complete');
+/**
  * Processes the given image with various image manipulation options.
  *
  * @param options - Image processing options.
@@ -168,16 +172,21 @@ function continueProcessing(image, options) {
         outputFilename = `${outputFilename}-z_${pixelSize}`;
     }
     outputFilename = `${outputFilename}.png`;
-    image.write(outputFilename, errorCallback);
-    console.log(`Image saved: ${outputFilename}`);
+    image
+        .writeAsync(outputFilename)
+        .then(() => {
+        console.log(`Image saved: ${outputFilename}`);
+        if (!worker_threads_1.isMainThread) {
+            workerIsDone();
+        }
+    })
+        .catch(errorCallback);
 }
 // If used as a worker thread, get file name from message
 if (!worker_threads_1.isMainThread) {
-    const workIsDone = () => worker_threads_1.parentPort?.postMessage('complete');
     worker_threads_1.parentPort?.on('message', async (message) => {
         const { filePath, options } = message;
         options.filename = filePath;
         processImage(options, true);
-        workIsDone();
     });
 }

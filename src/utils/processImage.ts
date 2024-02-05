@@ -19,6 +19,11 @@ function errorCallback(err: unknown) {
 }
 
 /**
+ * Called on a worker thread to signal current work is complete
+ */
+const workerIsDone = () => parentPort?.postMessage('complete');
+
+/**
  * Processes the given image with various image manipulation options.
  *
  * @param options - Image processing options.
@@ -203,21 +208,26 @@ function continueProcessing(image: Jimp, options: Options): void {
 	}
 	outputFilename = `${outputFilename}.png`;
 
-	image.write(outputFilename, errorCallback);
-	console.log(`Image saved: ${outputFilename}`);
+	image
+		.writeAsync(outputFilename)
+		.then(() => {
+			console.log(`Image saved: ${outputFilename}`);
+
+			if (!isMainThread) {
+				workerIsDone();
+			}
+		})
+		.catch(errorCallback);
 }
 
 // If used as a worker thread, get file name from message
 if (!isMainThread) {
-	const workIsDone = () => parentPort?.postMessage('complete');
-
 	parentPort?.on(
 		'message',
 		async (message: { filePath: string; options: Options }) => {
 			const { filePath, options } = message;
 			options.filename = filePath;
 			processImage(options, true);
-			workIsDone();
 		},
 	);
 }
