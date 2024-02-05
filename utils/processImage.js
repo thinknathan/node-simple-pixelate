@@ -19,13 +19,16 @@ function errorCallback(err) {
     }
 }
 /**
+ * Called on a worker thread to signal current work is complete
+ */
+const workerIsDone = () => worker_threads_1.parentPort?.postMessage('complete');
+/**
  * Processes the given image with various image manipulation options.
  *
  * @param options - Image processing options.
  * @param skipExtCheck - (Optional) Skips extension check if set to true.
  */
 function processImage(options, skipExtCheck) {
-    console.time('Done in');
     const { filename } = options;
     Jimp.read(filename)
         .then((image) => {
@@ -169,13 +172,21 @@ function continueProcessing(image, options) {
         outputFilename = `${outputFilename}-z_${pixelSize}`;
     }
     outputFilename = `${outputFilename}.png`;
-    image.write(outputFilename, errorCallback);
-    console.log(`Image saved: ${outputFilename}`);
-    console.timeEnd('Done in');
+    image
+        .writeAsync(outputFilename)
+        .then(() => {
+        console.log(`Image saved: ${outputFilename}`);
+        if (!worker_threads_1.isMainThread) {
+            workerIsDone();
+        }
+    })
+        .catch(errorCallback);
 }
 // If used as a worker thread, get file name from message
 if (!worker_threads_1.isMainThread) {
-    const { filePath, options } = worker_threads_1.workerData;
-    options.filename = filePath;
-    processImage(options, true);
+    worker_threads_1.parentPort?.on('message', async (message) => {
+        const { filePath, options } = message;
+        options.filename = filePath;
+        processImage(options, true);
+    });
 }

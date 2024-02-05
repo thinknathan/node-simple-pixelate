@@ -1,7 +1,7 @@
 import * as Jimp from 'jimp';
 import * as fs from 'fs';
 import * as path from 'path';
-import { workerData, isMainThread } from 'worker_threads';
+import { parentPort, isMainThread } from 'worker_threads';
 
 import { definedPalettes } from './definedPalettes';
 import { applyAlphaThreshold } from './applyAlphaThreshold';
@@ -19,13 +19,17 @@ function errorCallback(err: unknown) {
 }
 
 /**
+ * Called on a worker thread to signal current work is complete
+ */
+const workerIsDone = () => parentPort?.postMessage('complete');
+
+/**
  * Processes the given image with various image manipulation options.
  *
  * @param options - Image processing options.
  * @param skipExtCheck - (Optional) Skips extension check if set to true.
  */
 export function processImage(options: Options, skipExtCheck?: boolean): void {
-	console.time('Done in');
 	const { filename } = options;
 	Jimp.read(filename!)
 		.then((image) => {
@@ -204,14 +208,26 @@ function continueProcessing(image: Jimp, options: Options): void {
 	}
 	outputFilename = `${outputFilename}.png`;
 
-	image.write(outputFilename, errorCallback);
-	console.log(`Image saved: ${outputFilename}`);
-	console.timeEnd('Done in');
+	image
+		.writeAsync(outputFilename)
+		.then(() => {
+			console.log(`Image saved: ${outputFilename}`);
+
+			if (!isMainThread) {
+				workerIsDone();
+			}
+		})
+		.catch(errorCallback);
 }
 
 // If used as a worker thread, get file name from message
 if (!isMainThread) {
-	const { filePath, options } = workerData;
-	options.filename = filePath;
-	processImage(options, true);
+	parentPort?.on(
+		'message',
+		async (message: { filePath: string; options: Options }) => {
+			const { filePath, options } = message;
+			options.filename = filePath;
+			processImage(options, true);
+		},
+	);
 }
