@@ -15,7 +15,7 @@ async function main() {
 			alias: 'filename',
 			describe: 'Input image filename',
 			type: 'string',
-			coerce: (value) => {
+			coerce: (value: string | string[]) => {
 				if (Array.isArray(value)) {
 					value = value.join('');
 				}
@@ -26,7 +26,7 @@ async function main() {
 			alias: 'folderPath',
 			describe: 'Input folder',
 			type: 'string',
-			coerce: (value) => {
+			coerce: (value: string | string[]) => {
 				if (Array.isArray(value)) {
 					value = value.join('');
 				}
@@ -38,7 +38,7 @@ async function main() {
 			describe: 'Scale the image up or down by this factor',
 			type: 'number',
 			default: 1,
-			coerce: (value) => {
+			coerce: (value: number) => {
 				if (value <= 0) {
 					throw new Error('scale should be > 0');
 				}
@@ -50,7 +50,7 @@ async function main() {
 			describe: 'Rescale the image up or down by this factor, as the last step',
 			type: 'number',
 			default: 1,
-			coerce: (value) => {
+			coerce: (value: number) => {
 				if (value <= 0) {
 					throw new Error('scale should be > 0');
 				}
@@ -62,7 +62,7 @@ async function main() {
 			describe: 'Adjust contrast by a value between -1 and +1',
 			type: 'number',
 			default: 0,
-			coerce: (value) => {
+			coerce: (value: number) => {
 				if (value < -1 || value > 1) {
 					throw new Error('contrast should be between -1 and 1');
 				}
@@ -74,7 +74,7 @@ async function main() {
 			describe: 'Adjust blockiness by pixel size',
 			type: 'number',
 			default: 0,
-			coerce: (value) => {
+			coerce: (value: number) => {
 				if (value < 0) {
 					throw new Error('pixelSize should not be lower than 0');
 				}
@@ -93,7 +93,7 @@ async function main() {
 			describe: 'Adjust transparent pixels to hide/show based on threshold',
 			type: 'number',
 			default: 0.6,
-			coerce: (value) => {
+			coerce: (value: number) => {
 				if (value < 0.000001 || value > 0.999999) {
 					throw new Error('alphaThreshold should be a range > 0 and < 1');
 				}
@@ -105,7 +105,7 @@ async function main() {
 			describe: 'Limit number of colours',
 			type: 'number',
 			default: 8,
-			coerce: (value) => {
+			coerce: (value: number) => {
 				if (value < 2) {
 					throw new Error('colorLimit should not be lower than 2');
 				}
@@ -170,9 +170,11 @@ async function main() {
 			alias: 'customPalette',
 			describe: 'Custom palette in the format [[r, g, b], [r, g, b], ...]',
 			type: 'array',
-			coerce: (value) => {
+			coerce: (value: string[]) => {
 				// Convert the string to a proper array representation
-				const parsedArray = JSON.parse(`[${value.join('')}]`).pop();
+				const parsedArray = (
+					JSON.parse(`[${value.join('')}]`) as number[][][]
+				).pop();
 
 				// Validate the format and range of values
 				if (
@@ -237,7 +239,7 @@ async function main() {
 			alias: 'width',
 			describe: 'Output image width',
 			type: 'number',
-			coerce: (value) => {
+			coerce: (value: number) => {
 				if (value !== undefined && value < 1) {
 					throw new Error('width should not be lower than 1');
 				}
@@ -248,7 +250,7 @@ async function main() {
 			alias: 'height',
 			describe: 'Output image height',
 			type: 'number',
-			coerce: (value) => {
+			coerce: (value: number) => {
 				if (value !== undefined && value < 1) {
 					throw new Error('height should not be lower than 1');
 				}
@@ -279,4 +281,4 @@ async function main() {
 	// console.timeEnd('Done in');
 }
 
-main();
+void main();

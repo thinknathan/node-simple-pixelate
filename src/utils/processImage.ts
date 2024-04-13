@@ -224,7 +224,7 @@ function continueProcessing(image: Jimp, options: Options): void {
 if (!isMainThread) {
 	parentPort?.on(
 		'message',
-		async (message: { filePath: string; options: Options }) => {
+		(message: { filePath: string; options: Options }) => {
 			const { filePath, options } = message;
 			options.filename = filePath;
 			processImage(options, true);
